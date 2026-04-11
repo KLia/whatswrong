@@ -95,6 +95,11 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
         return false;
     }
 
+    public bool CanOpenDialogue()
+    {
+        return HasPlayableDialogue() || allowUserResponse;
+    }
+
     internal void RegisterSubmittedResponse(string submittedText)
     {
         lastSubmittedText = submittedText ?? string.Empty;
@@ -115,9 +120,9 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        if (!HasPlayableDialogue())
+        if (!CanOpenDialogue())
         {
-            Debug.LogWarning($"DialogueInteractable on '{name}' does not contain any valid dialogue lines.");
+            Debug.LogWarning($"DialogueInteractable on '{name}' does not contain any valid dialogue lines or response input.");
             return;
         }
 
