@@ -11,7 +11,8 @@ public static class DiamondConstants
 	// public const string INPUT_AREA_HOME = "home";
 	// public const string INPUT_AREA_WORK = "work";
 	// public const string INPUT_AREA_OTHER = "other";
-	
+
+	public const string INPUT_KEY_DADDY = "daddy";
 	public const string INPUT_KEY_GUESS = "guess";
 	public const string INPUT_KEY_REASON = "reason";
 	// public const string INPUT_KEY_AREA = "area_of_distress";
@@ -20,6 +21,6 @@ public static class DiamondConstants
 	/// These are the Output values used to grab the text the Diamond has been generating
 	/// based on the input values. 
 	/// </summary>
-	public const string OUTPUT_REPLY = "reply";
+	public const string OUTPUT_REPLY = "daddys_reply";
 	public const string OUTPUT_GAME_OVER = "game_over";
 }
