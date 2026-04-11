@@ -2,17 +2,23 @@
 
 namespace Game.Scripts
 {
-    public class CameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour, ISceneLoadHandler
     {
         [SerializeField] private float moveSpeed = 5f;
        
         private float _moveDirection;
         private InputMapping _input;
-        private Camera _camera;
+        private Vector3 _initialPosition;
 
-        private void Start()
+        private void Awake()
         {
-            _camera = GetComponent<Camera>();
+            _initialPosition = transform.position;
+        }
+
+        private void ResetCamera()
+        {
+            transform.position = _initialPosition;
+            _moveDirection = 0f; // optional: stop movement
         }
 
         public void Initialize(InputMapping inputMapping)
@@ -60,6 +66,11 @@ namespace Game.Scripts
             _input.MoveLeftStopped -= OnMoveLeftStopped;
             _input.MoveRightStarted -= OnMoveRightStarted;
             _input.MoveRightStopped -= OnMoveRightStopped;
+        }
+
+        public void OnBeforeSceneLoad()
+        {
+            ResetCamera();
         }
     }
 }

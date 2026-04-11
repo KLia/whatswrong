@@ -38,7 +38,7 @@ namespace Game.Scripts
 
             private static void CleanUpScene()
             {
-                foreach (var handler in FindObjectsOfType<MonoBehaviour>().OfType<ISceneUnloadHandler>())
+                foreach (var handler in FindObjectsOfType<MonoBehaviour>().OfType<ISceneUnlaodHandler>())
                 {
                     handler.OnBeforeSceneUnload();
                 }
@@ -46,13 +46,17 @@ namespace Game.Scripts
 
             public IEnumerator LoadScene(string sceneName)
             {
+                foreach (var handler in FindObjectsOfType<MonoBehaviour>().OfType<ISceneLoadHandler>())
+                {
+                    handler.OnBeforeSceneLoad();
+                }
                 yield return _sceneTransition.FadeIn(sceneName);
             }
             
 
             private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
             {
-                if (mode != LoadSceneMode.Additive)
+                if (mode == LoadSceneMode.Additive)
                     return;
 
                 foreach (var root in scene.GetRootGameObjects())

@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 using System.Collections;
 using Game.Scripts;
 
-public class CameraZoomController : MonoBehaviour, ISceneUnloadHandler
+public class CameraZoomController : MonoBehaviour, ISceneUnlaodHandler
 {
     [Header("Zoom Animation Settings")]
     [Tooltip("Durata dell'animazione di zoom (in secondi)")]

@@ -1,6 +1,6 @@
 ﻿namespace Game.Scripts
 {
-    public interface ISceneUnloadHandler
+    public interface ISceneUnlaodHandler
     {
         void OnBeforeSceneUnload();
     }
