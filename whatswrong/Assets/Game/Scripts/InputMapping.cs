@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
 
 namespace Game.Scripts
 {
@@ -82,67 +81,6 @@ namespace Game.Scripts
 
             _leftWasPressed = leftPressed;
             _rightWasPressed = rightPressed;
-
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                if (!ShouldHandleRoomNavigationClick())
-                    return;
-
-                Vector2 pos = Mouse.current.position.ReadValue();
-
-                if (pos.x < Screen.width * 0.5f)
-                    OnLeftClick();
-                else
-                    OnRightClick();
-            }
-        }
-
-        private bool ShouldHandleRoomNavigationClick()
-        {
-            if (RuntimeDialogueUI.IsBlockingInput)
-                return false;
-
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-                return false;
-
-            Camera targetCamera = ResolveGameplayCamera();
-            if (targetCamera == null || Mouse.current == null)
-                return true;
-
-            Ray ray = targetCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (!Physics.Raycast(ray, out RaycastHit hit))
-                return true;
-
-            if (hit.collider.GetComponentInParent<DialogueInteractable>() != null)
-                return false;
-
-            if (hit.collider.GetComponentInParent<ClickableObject>() != null)
-                return false;
-
-            return true;
-        }
-
-        private Camera ResolveGameplayCamera()
-        {
-            CameraZoomController zoomController = FindFirstObjectByType<CameraZoomController>();
-            if (zoomController != null)
-            {
-                Camera zoomCamera = zoomController.GetComponent<Camera>();
-                if (zoomCamera != null && zoomCamera.isActiveAndEnabled)
-                    return zoomCamera;
-            }
-
-            if (Camera.main != null && Camera.main.isActiveAndEnabled)
-                return Camera.main;
-
-            Camera[] cameras = FindObjectsByType<Camera>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            foreach (Camera sceneCamera in cameras)
-            {
-                if (sceneCamera.isActiveAndEnabled)
-                    return sceneCamera;
-            }
-
-            return null;
         }
 
         private void OnDestroy()
