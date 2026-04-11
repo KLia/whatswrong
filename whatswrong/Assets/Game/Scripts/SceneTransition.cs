@@ -15,13 +15,18 @@ namespace Game.Scripts
             if (transitionOverlay != null)
                 transitionOverlay.alpha = 1f;
 
+            yield return LoadScene(sceneName);
+            
+            if (transitionOverlay != null)
+                yield return FadeOverlay(0f, fadeInDuration);
+        }
+
+        public IEnumerator LoadScene(string sceneName)
+        {
             yield return SceneManager.LoadSceneAsync(
                 sceneName,
                 LoadSceneMode.Additive
             );
-            
-            if (transitionOverlay != null)
-                yield return FadeOverlay(0f, fadeInDuration);
         }
 
         public IEnumerator FadeOut(string sceneName)

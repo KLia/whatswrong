@@ -3,8 +3,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System.Collections;
+using Game.Scripts;
 
-public class CameraZoomController : MonoBehaviour
+public class CameraZoomController : MonoBehaviour, ISceneUnlaodHandler
 {
     [Header("Zoom Animation Settings")]
     [Tooltip("Durata dell'animazione di zoom (in secondi)")]
@@ -30,6 +31,10 @@ public class CameraZoomController : MonoBehaviour
     private Transform currentTarget = null;
     private Coroutine currentZoomCoroutine;
     private ClickableObject currentObject = null;
+    private ClickableObject _clickedObject;
+    private Vector3 _targetWorldPos;
+    private float _scale;
+    private float _cameraDistance;
 
     // Proprietà pubbliche per ClickableObject
     public bool IsZoomed => isZoomed;
@@ -119,6 +124,10 @@ public class CameraZoomController : MonoBehaviour
             Debug.LogWarning("ClickableObject è null!");
             return;
         }
+        _clickedObject = obj;
+        _targetWorldPos = targetWorldPos;
+        _scale = scale;
+        _cameraDistance = cameraDistance;
 
         if (currentZoomCoroutine != null)
         {
@@ -136,7 +145,7 @@ public class CameraZoomController : MonoBehaviour
 
         // In 2D con sfondo fisso, NON muoviamo la camera
         // Avvia le animazioni solo per l'oggetto
-        currentZoomCoroutine = StartCoroutine(ZoomObjectCoroutine(obj, targetWorldPos, scale));
+        currentZoomCoroutine = StartCoroutine(ZoomObjectCoroutine(_clickedObject, targetWorldPos, scale));
     }
 
     public void ResetCamera()
@@ -295,5 +304,15 @@ public class CameraZoomController : MonoBehaviour
 
         depthOfField.focusDistance.overrideState = true;
         depthOfField.focusDistance.value = focusDistance;
+    }
+
+    public void OnBeforeSceneUnload()
+    {
+        StopCoroutine(ZoomObjectCoroutine(_clickedObject, _targetWorldPos, _scale));;
+        _clickedObject = null;
+        _targetWorldPos = Vector3.zero;
+        _scale = 1f;
+        _cameraDistance = 0f;
+        ResetCamera();
     }
 }

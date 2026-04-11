@@ -6,6 +6,7 @@ namespace Game.Scripts
 {
     public class InputMapping : MonoBehaviour
     {
+        [SerializeField] private NavigationControls navigationControls;
         public event Action NextRoom;
         public event Action PreviousRoom;
 
@@ -47,7 +48,16 @@ namespace Game.Scripts
         {
             MoveLeftStarted?.Invoke();
         }
-        
+
+        private void Start()
+        {
+            if (navigationControls == null)
+                return;
+
+            navigationControls.NextButtonPressed += OnRightClick;
+            navigationControls.PreviousButtonPressed += OnLeftClick;
+        }
+
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
@@ -71,16 +81,15 @@ namespace Game.Scripts
 
             _leftWasPressed = leftPressed;
             _rightWasPressed = rightPressed;
+        }
 
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                Vector2 pos = Mouse.current.position.ReadValue();
+        private void OnDestroy()
+        {
+            if (navigationControls == null)
+                return;
 
-                if (pos.x < Screen.width * 0.5f)
-                    OnLeftClick();
-                else
-                    OnRightClick();
-            }
+            navigationControls.NextButtonPressed -= OnRightClick;
+            navigationControls.PreviousButtonPressed -= OnLeftClick;
         }
 
     }
