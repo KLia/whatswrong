@@ -187,7 +187,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         _dialogueText = CreateText("DialogueText", _textAreaRect, 42, PinkSpeakerColor, TextAnchor.UpperLeft);
         _dialogueText.horizontalOverflow = HorizontalWrapMode.Wrap;
         _dialogueText.verticalOverflow = VerticalWrapMode.Truncate;
-        StretchRect((RectTransform)_dialogueText.transform, Vector2.zero, new Vector2(0f, -250f));
+        StretchRect((RectTransform)_dialogueText.transform, Vector2.zero, new Vector2(0f, -300f));
 
         _continueBoxRect = CreateRectTransform("ContinueBox", _panelRect);
         _continueBoxRect.anchorMin = new Vector2(0.5f, 0f);
@@ -265,12 +265,6 @@ public class RuntimeDialogueUI : MonoBehaviour
             }
         }
 
-        if (_activeLines.Count == 0)
-        {
-            Debug.LogWarning($"DialogueInteractable on '{source.name}' does not contain any playable lines.");
-            return;
-        }
-
         _currentSource = source;
         _currentLineIndex = -1;
         _ignoreAdvanceFrame = Time.frameCount;
@@ -285,6 +279,19 @@ public class RuntimeDialogueUI : MonoBehaviour
         _responseRoot.SetActive(false);
         _dialogueText.gameObject.SetActive(true);
         SetContinueBoxVisible(false);
+
+        if (_activeLines.Count == 0)
+        {
+            if (source.AllowUserResponse)
+            {
+                ShowResponseInput();
+                return;
+            }
+
+            Debug.LogWarning($"DialogueInteractable on '{source.name}' does not contain any playable lines.");
+            HideDialogue();
+            return;
+        }
 
         ShowNextLine();
     }
