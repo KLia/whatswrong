@@ -2,18 +2,23 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine.InputSystem;
+using Game.Scripts;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class SceneNavigation : MonoBehaviour
 {
-    private List<string> contentScenes = new List<string>();
+    [SerializeField] private InputMapping input;
+    [SerializeField] private SceneTransition sceneTransition;
 
+    private List<string> contentScenes = new List<string>();
     private int currentIndex = -1;
     private bool isSwitching = false;
 
     private void Awake()
     {
+        input.NextRoom += ShowNext;
+        input.PreviousRoom += ShowPrevious;
         BuildSceneList();
     }
 
@@ -49,33 +54,9 @@ public class SceneNavigation : MonoBehaviour
     private IEnumerator LoadInitialScene()
     {
         isSwitching = true;
-
-        yield return SceneManager.LoadSceneAsync(
-            contentScenes[0],
-            LoadSceneMode.Additive
-        );
-
+        yield return sceneTransition.FadeIn(contentScenes[0]);
         currentIndex = 0;
         isSwitching = false;
-    }
-    
-    private void Update()
-    {
-        if (isSwitching)
-            return;
-        
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null)
-            return;
-
-        if (keyboard.leftArrowKey.wasPressedThisFrame)
-        {
-            ShowPrevious();
-        }
-        else if (keyboard.rightArrowKey.wasPressedThisFrame)
-        {
-            ShowNext();
-        }
     }
 
     public void ShowNext()
@@ -104,14 +85,17 @@ public class SceneNavigation : MonoBehaviour
         string currentScene = contentScenes[currentIndex];
         string nextScene = contentScenes[nextIndex];
 
-        yield return SceneManager.UnloadSceneAsync(currentScene);
-
-        yield return SceneManager.LoadSceneAsync(
-            nextScene,
-            LoadSceneMode.Additive
-        );
+        yield return sceneTransition.FadeOut(currentScene);
+        yield return sceneTransition.FadeIn(nextScene);
 
         currentIndex = nextIndex;
+
         isSwitching = false;
+    }
+
+    private void OnDestroy()
+    {
+        input.NextRoom -= ShowNext;
+        input.PreviousRoom -= ShowPrevious;
     }
 }
