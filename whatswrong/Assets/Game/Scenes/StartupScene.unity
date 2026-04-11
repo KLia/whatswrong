@@ -294,7 +294,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  blurProfile: {fileID: 0}
+  enableBlur: 1
+  blurIntensity: 5
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +660,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1617111142}
   - component: {fileID: 1617111143}
+  - component: {fileID: 1617111144}
   m_Layer: 0
   m_Name: SceneNavigation
   m_TagString: Untagged
@@ -696,7 +698,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   input: {fileID: 1816964456}
-  sceneTransition: {fileID: 1933954292}
+  sceneLoader: {fileID: 0}
+--- !u!114 &1617111144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617111141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83cb8e15e44c4b828be8d9929b8ca974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.Game.Scripts.SceneLoader
 --- !u!1 &1816964454
 GameObject:
   m_ObjectHideFlags: 0

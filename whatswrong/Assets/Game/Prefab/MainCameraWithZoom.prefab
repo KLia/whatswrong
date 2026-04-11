@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8831271555709234108}
   - component: {fileID: 6172806904061332456}
   - component: {fileID: 1365076492727448255}
+  - component: {fileID: 1150067296622731679}
   m_Layer: 0
   m_Name: MainCameraWithZoom
   m_TagString: MainCamera
@@ -177,3 +178,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   enableBlur: 1
   blurIntensity: 5
+--- !u!114 &1150067296622731679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4430626524605106348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 031f5986fa2a4203bf2d847cf45cb888, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.CameraController

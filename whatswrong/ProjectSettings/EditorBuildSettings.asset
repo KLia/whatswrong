@@ -24,4 +24,4 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Rooms/Office.unity
     guid: e52122f3f63bfd1489fdd5ef60c4ec3d
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dd0431f7ce40751428d0e12e353f7eca, type: 3}

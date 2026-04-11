@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Scripts.Game.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,19 +8,20 @@ namespace Game.Scripts
 {
     public class SceneNavigation : MonoBehaviour
     {
-        [SerializeField] private InputMapping input;
-        [SerializeField] private SceneTransition sceneTransition;
-
         private const string RoomsFolder = "Assets/Game/Scenes/Rooms/";
         private readonly List<string> _contentScenes = new List<string>();
         private int _currentIndex = -1;
     
         private bool _isSwitching = false;
+        private SceneLoader _sceneLoader;
+        private InputMapping _input;
 
         private void Awake()
         {
-            input.NextRoom += ShowNext;
-            input.PreviousRoom += ShowPrevious;
+            _sceneLoader = FindObjectOfType<SceneLoader>();
+            _input = FindObjectOfType<InputMapping>();
+            _input.NextRoom += ShowNext;
+            _input.PreviousRoom += ShowPrevious;
             BuildSceneList();
         }
 
@@ -59,7 +61,7 @@ namespace Game.Scripts
         private IEnumerator LoadInitialScene()
         {
             _isSwitching = true;
-            yield return sceneTransition.FadeIn(_contentScenes[0]);
+            yield return _sceneLoader.LoadScene(_contentScenes[0]);
             _currentIndex = 0;
             _isSwitching = false;
         }
@@ -90,17 +92,17 @@ namespace Game.Scripts
             var currentScene = _contentScenes[_currentIndex];
             var nextScene = _contentScenes[nextIndex];
 
-            yield return sceneTransition.FadeOut(currentScene);
-            yield return sceneTransition.FadeIn(nextScene);
+            yield return _sceneLoader.UnloadScene(currentScene);
+            yield return _sceneLoader.LoadScene(nextScene);
 
             _currentIndex = nextIndex;
             _isSwitching = false;
         }
-
+        
         private void OnDestroy()
         {
-            input.NextRoom -= ShowNext;
-            input.PreviousRoom -= ShowPrevious;
+            _input.NextRoom -= ShowNext;
+            _input.PreviousRoom -= ShowPrevious;
         }
     }
 }
