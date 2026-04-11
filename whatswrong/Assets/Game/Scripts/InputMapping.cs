@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Game.Scripts
 {
@@ -52,6 +51,9 @@ namespace Game.Scripts
 
         private void Start()
         {
+            if (navigationControls == null)
+                return;
+
             navigationControls.NextButtonPressed += OnRightClick;
             navigationControls.PreviousButtonPressed += OnLeftClick;
         }
@@ -79,7 +81,15 @@ namespace Game.Scripts
 
             _leftWasPressed = leftPressed;
             _rightWasPressed = rightPressed;
+        }
 
+        private void OnDestroy()
+        {
+            if (navigationControls == null)
+                return;
+
+            navigationControls.NextButtonPressed -= OnRightClick;
+            navigationControls.PreviousButtonPressed -= OnLeftClick;
         }
 
     }
