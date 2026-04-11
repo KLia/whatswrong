@@ -44,13 +44,21 @@ namespace Game.Scripts
                 }
             }
 
-            public IEnumerator LoadScene(string sceneName)
+            public IEnumerator LoadScene(string sceneName, bool fade = true)
             {
                 foreach (var handler in FindObjectsOfType<MonoBehaviour>().OfType<ISceneLoadHandler>())
                 {
                     handler.OnBeforeSceneLoad();
                 }
-                yield return _sceneTransition.FadeIn(sceneName);
+
+                if (fade)
+                {
+                    yield return _sceneTransition.FadeIn(sceneName);
+                }
+                else
+                {
+                    yield return _sceneTransition.LoadScene(sceneName);
+                }
             }
             
 

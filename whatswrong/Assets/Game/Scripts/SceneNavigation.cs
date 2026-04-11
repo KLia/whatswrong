@@ -90,7 +90,7 @@ namespace Game.Scripts
         private IEnumerator LoadInitialScene()
         {
             _isSwitching = true;
-            yield return _sceneLoader.LoadScene(_contentScenes[_currentIndex]);
+            yield return _sceneLoader.LoadScene(_contentScenes[_currentIndex], false);
             _isSwitching = false;
         }
 
