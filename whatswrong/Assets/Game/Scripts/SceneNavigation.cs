@@ -1,101 +1,108 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Game.Scripts;
+using Game.Scripts.Game.Scripts;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
-public class SceneNavigation : MonoBehaviour
+namespace Game.Scripts
 {
-    [SerializeField] private InputMapping input;
-    [SerializeField] private SceneTransition sceneTransition;
-
-    private List<string> contentScenes = new List<string>();
-    private int currentIndex = -1;
-    private bool isSwitching = false;
-
-    private void Awake()
+    public class SceneNavigation : MonoBehaviour
     {
-        input.NextRoom += ShowNext;
-        input.PreviousRoom += ShowPrevious;
-        BuildSceneList();
-    }
+        private const string RoomsFolder = "Assets/Game/Scenes/Rooms/";
+        private readonly List<string> _contentScenes = new List<string>();
+        private int _currentIndex = -1;
+    
+        private bool _isSwitching = false;
+        private SceneLoader _sceneLoader;
+        private InputMapping _input;
 
-    private void Start()
-    {
-        if (contentScenes.Count == 0)
+        private void Awake()
         {
-            Debug.LogError("No content scenes found in Build Settings.");
-            return;
+            _sceneLoader = FindObjectOfType<SceneLoader>();
+            _input = FindObjectOfType<InputMapping>();
+            _input.NextRoom += ShowNext;
+            _input.PreviousRoom += ShowPrevious;
+            BuildSceneList();
         }
 
-        StartCoroutine(LoadInitialScene());
-    }
-
-    void BuildSceneList()
-    {
-        string mainSceneName = SceneManager.GetActiveScene().name;
-
-        int count = SceneManager.sceneCountInBuildSettings;
-
-        for (int i = 0; i < count; i++)
+        private void Start()
         {
-            string path = SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneName = Path.GetFileNameWithoutExtension(path);
+            if (_contentScenes.Count == 0)
+            {
+                Debug.LogError("No content scenes found in Build Settings.");
+                return;
+            }
 
-            if (sceneName == mainSceneName)
-                continue; // skip main scene
-
-            contentScenes.Add(sceneName);
+            StartCoroutine(LoadInitialScene());
         }
-    }
 
-    private IEnumerator LoadInitialScene()
-    {
-        isSwitching = true;
-        yield return sceneTransition.FadeIn(contentScenes[0]);
-        currentIndex = 0;
-        isSwitching = false;
-    }
+        private void BuildSceneList()
+        {
+            _contentScenes.Clear();
 
-    public void ShowNext()
-    {
-        if (!isSwitching)
-            StartCoroutine(SwitchScene(+1));
-    }
+            string mainScenePath = SceneManager.GetActiveScene().path;
 
-    public void ShowPrevious()
-    {
-        if (!isSwitching)
-            StartCoroutine(SwitchScene(-1));
-    }
+            int count = SceneManager.sceneCountInBuildSettings;
 
-    private IEnumerator SwitchScene(int direction)
-    {
-        isSwitching = true;
+            for (int i = 0; i < count; i++)
+            {
+                string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
 
-        int nextIndex = currentIndex + direction;
+                if (scenePath == mainScenePath)
+                    continue;
 
-        if (nextIndex < 0)
-            nextIndex = contentScenes.Count - 1;
-        else if (nextIndex >= contentScenes.Count)
-            nextIndex = 0;
+                if (!scenePath.StartsWith(RoomsFolder))
+                    continue;
 
-        string currentScene = contentScenes[currentIndex];
-        string nextScene = contentScenes[nextIndex];
+                _contentScenes.Add(scenePath);
+            }
+        }
+    
+        private IEnumerator LoadInitialScene()
+        {
+            _isSwitching = true;
+            yield return _sceneLoader.LoadScene(_contentScenes[0]);
+            _currentIndex = 0;
+            _isSwitching = false;
+        }
 
-        yield return sceneTransition.FadeOut(currentScene);
-        yield return sceneTransition.FadeIn(nextScene);
+        private void ShowNext()
+        {
+            if (!_isSwitching)
+                StartCoroutine(SwitchScene(+1));
+        }
 
-        currentIndex = nextIndex;
+        private void ShowPrevious()
+        {
+            if (!_isSwitching)
+                StartCoroutine(SwitchScene(-1));
+        }
 
-        isSwitching = false;
-    }
+        private IEnumerator SwitchScene(int direction)
+        {
+            _isSwitching = true;
 
-    private void OnDestroy()
-    {
-        input.NextRoom -= ShowNext;
-        input.PreviousRoom -= ShowPrevious;
+            var nextIndex = _currentIndex + direction;
+
+            if (nextIndex < 0)
+                nextIndex = _contentScenes.Count - 1;
+            else if (nextIndex >= _contentScenes.Count)
+                nextIndex = 0;
+
+            var currentScene = _contentScenes[_currentIndex];
+            var nextScene = _contentScenes[nextIndex];
+
+            yield return _sceneLoader.UnloadScene(currentScene);
+            yield return _sceneLoader.LoadScene(nextScene);
+
+            _currentIndex = nextIndex;
+            _isSwitching = false;
+        }
+        
+        private void OnDestroy()
+        {
+            _input.NextRoom -= ShowNext;
+            _input.PreviousRoom -= ShowPrevious;
+        }
     }
 }

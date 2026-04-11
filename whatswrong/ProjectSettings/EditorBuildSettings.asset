@@ -9,16 +9,19 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/StartupScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Game/Scenes/BathRoom.unity
+    path: Assets/Game/Scenes/Rooms/BathRoom.unity
     guid: 88ea036a465c1b844a91c13f09415944
   - enabled: 1
-    path: Assets/Game/Scenes/Kitchen.unity
+    path: Assets/Game/Scenes/Rooms/Entrance.unity
+    guid: c7b53d1e9fe6ba44d82130f3afaa3497
+  - enabled: 1
+    path: Assets/Game/Scenes/Rooms/BedRoom.unity
+    guid: da6affe61c9f7dd47a93b3c078fc94a2
+  - enabled: 1
+    path: Assets/Game/Scenes/Rooms/Kitchen.unity
     guid: 74166ac8c318ddb489a9e3907e25b0a3
   - enabled: 1
-    path: Assets/Game/Scenes/Office.unity
+    path: Assets/Game/Scenes/Rooms/Office.unity
     guid: e52122f3f63bfd1489fdd5ef60c4ec3d
-  - enabled: 1
-    path: Assets/Game/Scenes/BedRoom.unity
-    guid: da6affe61c9f7dd47a93b3c078fc94a2
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: dd0431f7ce40751428d0e12e353f7eca, type: 3}
