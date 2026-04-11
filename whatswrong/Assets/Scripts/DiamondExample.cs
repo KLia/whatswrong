@@ -58,7 +58,7 @@ public class DiamondExample : MonoBehaviour
 		    UnityEngine.Debug.LogError("Something went wrong with the Diamond");
 	    }
 	    
-	    PrintReplies(DiamondConstants.INPUT_ACTION);
+	    PrintReplies("The bride decided to kiss her husband and forgive him", DiamondConstants.INPUT_WAR);
     }
 
 	/// <summary>
@@ -67,13 +67,13 @@ public class DiamondExample : MonoBehaviour
 	/// while waiting for the reply from the Diamond.
 	/// </summary>
 	/// <param name="input"></param>
-	private async void PrintReplies(string input)
+	private async void PrintReplies(string original_story, string tone)
 	{
 		var replies = new Dictionary<string, string>();
 
 		try
 		{
-			replies = await InvokeReplyAsync(input);
+			replies = await InvokeReplyAsync(original_story, tone);
 		}
 		catch (Exception e)
 		{
@@ -86,12 +86,12 @@ public class DiamondExample : MonoBehaviour
 		}
 	}
 	
-	private async Task<Dictionary<string, string>> InvokeReplyAsync(string input)
+	private async Task<Dictionary<string, string>> InvokeReplyAsync(string original_story, string tone)
 	{
-		return await Task.Run(() => InvokeReply(input));
+		return await Task.Run(() => InvokeReply(original_story, tone));
 	}
 	
-	private Dictionary<string, string> InvokeReply(string input)
+	private Dictionary<string, string> InvokeReply(string original_story, string tone)
 	{
 		if (_textModule == null)
 		{
@@ -112,7 +112,8 @@ public class DiamondExample : MonoBehaviour
 		// them by calling the .Set method with each key and the value
 		// for the input. The SDK currently allows to set strings and integer
 		// values.
-		textModuleInput.Set(DiamondConstants.INPUT_KEY_GENRE, input);
+		textModuleInput.Set(DiamondConstants.INPUT_KEY_ORIGINAL, original_story);
+		textModuleInput.Set(DiamondConstants.INPUT_KEY_TONE, tone);
 	    
 		// To get more fine-grained control over how the Diamond should invoke
 		// the inputs, we also have the following TextModuleInvokeParameters class.
@@ -146,14 +147,12 @@ public class DiamondExample : MonoBehaviour
 		// to get the output values.
 		// In the same way as with inputs, we get the string values of each of the outputs by
 		// using the correct key value.
-		var characterAReply = textResult.GetString(DiamondConstants.OUTPUT_CHARACTER_A_REPLY);
-		var charactorBReply	= textResult.GetString(DiamondConstants.OUTPUT_CHARACTER_B_REPLY);
+		var alternate	= textResult.GetString(DiamondConstants.OUTPUT_ENDING);
 		
 		
 		// In this example I'm using a Dictionary to keep both key and values
 		// together, but you can use the values however you want.
-		replies.Add(DiamondConstants.OUTPUT_CHARACTER_A_REPLY, characterAReply);
-		replies.Add(DiamondConstants.OUTPUT_CHARACTER_B_REPLY, charactorBReply);
+		replies.Add(DiamondConstants.OUTPUT_ENDING, alternate);
 	    
 		return replies;
 	}

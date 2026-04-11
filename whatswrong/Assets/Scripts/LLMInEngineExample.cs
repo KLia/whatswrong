@@ -54,7 +54,7 @@ public class LLMInEngineExample : MonoBehaviour
 	    // we need to use the CloudTextModuleOptions object created above.
 	    _cloudTextModule = context.CreateCloudTextModule(cloudTextModuleOptions);
 	    
-	    PrintReplies(DiamondConstants.INPUT_COMEDY);
+	    PrintReplies("The bride killed her husband for cheating on her", DiamondConstants.INPUT_SAD);
     }
 
 	/// <summary>
@@ -62,14 +62,15 @@ public class LLMInEngineExample : MonoBehaviour
 	/// we call the logic using async method. This will allow us to still keep playing animation etc.
 	/// while waiting for the reply from the LLM.
 	/// </summary>
-	/// <param name="input"></param>
-	private async void PrintReplies(string input)
+	/// <param name="original_story"></param>
+	/// <param name="tone"></param>
+	private async void PrintReplies(string original_story, string tone)
 	{
 		var replies = new Dictionary<string, string>();
 
 		try
 		{
-			replies = await InvokeReplyAsync(input);
+			replies = await InvokeReplyAsync(original_story, tone);
 		}
 		catch (Exception e)
 		{
@@ -82,12 +83,12 @@ public class LLMInEngineExample : MonoBehaviour
 		}
 	}
 	
-	private async Task<Dictionary<string, string>> InvokeReplyAsync(string input)
+	private async Task<Dictionary<string, string>> InvokeReplyAsync(string original_story, string tone)
 	{
-		return await Task.Run(() => InvokeReply(input));
+		return await Task.Run(() => InvokeReply(original_story, tone));
 	}
 	
-	private Dictionary<string, string> InvokeReply(string input)
+	private Dictionary<string, string> InvokeReply(string original_story, string tone)
 	{
 		if (_cloudTextModule == null)
 		{
@@ -108,7 +109,8 @@ public class LLMInEngineExample : MonoBehaviour
 		// them by calling the .Set method with each key and the value
 		// for the input. The SDK currently allows to set strings and integer
 		// values.
-		textModuleInput.Set(DiamondConstants.INPUT_KEY_GENRE, input);
+		textModuleInput.Set(DiamondConstants.INPUT_KEY_ORIGINAL, original_story);
+		textModuleInput.Set(DiamondConstants.INPUT_KEY_TONE, tone);
 	    
 		// To get more fine-grained control over how the LLM should invoke
 		// the inputs, we also have the following TextModuleInvokeParameters class.
@@ -143,13 +145,11 @@ public class LLMInEngineExample : MonoBehaviour
 		// to get the output values.
 		// In the same way as with inputs, we get the string values of each of the outputs by
 		// using the correct key value.
-		var characterAReply = textResult.GetString(DiamondConstants.OUTPUT_CHARACTER_A_REPLY);
-		var charactorBReply	= textResult.GetString(DiamondConstants.OUTPUT_CHARACTER_B_REPLY);
+		var ending = textResult.GetString(DiamondConstants.OUTPUT_ENDING);
 		
 		// In this example I'm using a Dictionary to keep both key and values
 		// together, but you can use the values however you want.
-		replies.Add(DiamondConstants.OUTPUT_CHARACTER_A_REPLY, characterAReply);
-		replies.Add(DiamondConstants.OUTPUT_CHARACTER_B_REPLY, charactorBReply);
+		replies.Add(DiamondConstants.OUTPUT_ENDING, ending);
 	    
 		return replies;
 	}
