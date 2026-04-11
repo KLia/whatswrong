@@ -25,9 +25,5 @@ namespace Game.Scripts
             }
         }
 
-        public void ResolveDependency()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
