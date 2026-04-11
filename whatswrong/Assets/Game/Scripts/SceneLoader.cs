@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 
 namespace Game.Scripts
 {
@@ -31,13 +32,23 @@ namespace Game.Scripts
 
             public IEnumerator UnloadScene(string sceneName)
             {
+                CleanUpScene();
                 yield return _sceneTransition.FadeOut(sceneName);
             }
-            
+
+            private static void CleanUpScene()
+            {
+                foreach (var handler in FindObjectsOfType<MonoBehaviour>().OfType<ISceneUnloadHandler>())
+                {
+                    handler.OnBeforeSceneUnload();
+                }
+            }
+
             public IEnumerator LoadScene(string sceneName)
             {
                 yield return _sceneTransition.FadeIn(sceneName);
             }
+            
 
             private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
             {

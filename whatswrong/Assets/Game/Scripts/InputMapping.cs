@@ -1,11 +1,13 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Game.Scripts
 {
     public class InputMapping : MonoBehaviour
     {
+        [SerializeField] private NavigationControls navigationControls;
         public event Action NextRoom;
         public event Action PreviousRoom;
 
@@ -47,7 +49,13 @@ namespace Game.Scripts
         {
             MoveLeftStarted?.Invoke();
         }
-        
+
+        private void Start()
+        {
+            navigationControls.NextButtonPressed += OnRightClick;
+            navigationControls.PreviousButtonPressed += OnLeftClick;
+        }
+
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
@@ -72,15 +80,6 @@ namespace Game.Scripts
             _leftWasPressed = leftPressed;
             _rightWasPressed = rightPressed;
 
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                Vector2 pos = Mouse.current.position.ReadValue();
-
-                if (pos.x < Screen.width * 0.5f)
-                    OnLeftClick();
-                else
-                    OnRightClick();
-            }
         }
 
     }
