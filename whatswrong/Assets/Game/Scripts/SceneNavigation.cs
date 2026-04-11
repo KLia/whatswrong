@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using Game.Scripts;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class SceneNavigation : MonoBehaviour
 {
@@ -33,24 +32,29 @@ public class SceneNavigation : MonoBehaviour
         StartCoroutine(LoadInitialScene());
     }
 
-    void BuildSceneList()
+    private void BuildSceneList()
     {
-        string mainSceneName = SceneManager.GetActiveScene().name;
+        contentScenes.Clear();
+
+        string mainScenePath = SceneManager.GetActiveScene().path;
+        const string roomsFolder = "Assets/Game/Scenes/Rooms/";
 
         int count = SceneManager.sceneCountInBuildSettings;
 
         for (int i = 0; i < count; i++)
         {
-            string path = SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneName = Path.GetFileNameWithoutExtension(path);
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
 
-            if (sceneName == mainSceneName)
-                continue; // skip main scene
+            if (scenePath == mainScenePath)
+                continue;
 
-            contentScenes.Add(sceneName);
+            if (!scenePath.StartsWith(roomsFolder))
+                continue;
+
+            contentScenes.Add(scenePath);
         }
     }
-
+    
     private IEnumerator LoadInitialScene()
     {
         isSwitching = true;
