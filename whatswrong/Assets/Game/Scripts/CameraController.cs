@@ -23,7 +23,15 @@ namespace Game.Scripts
 
         public void Initialize(InputMapping inputMapping)
         {
+            if (_input == inputMapping)
+                return;
+
+            UnsubscribeInput();
             _input = inputMapping;
+
+            if (_input == null)
+                return;
+
             _input.MoveLeftStarted += OnMoveLeftStarted;
             _input.MoveLeftStopped += OnMoveLeftStopped;
             _input.MoveRightStarted += OnMoveRightStarted;
@@ -62,10 +70,19 @@ namespace Game.Scripts
 
         private void OnDestroy()
         {
+            UnsubscribeInput();
+        }
+
+        private void UnsubscribeInput()
+        {
+            if (_input == null)
+                return;
+
             _input.MoveLeftStarted -= OnMoveLeftStarted;
             _input.MoveLeftStopped -= OnMoveLeftStopped;
             _input.MoveRightStarted -= OnMoveRightStarted;
             _input.MoveRightStopped -= OnMoveRightStopped;
+            _input = null;
         }
 
         public void OnBeforeSceneLoad()
