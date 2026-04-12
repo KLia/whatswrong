@@ -217,8 +217,8 @@ public class RuntimeDialogueUI : MonoBehaviour
         RectTransform promptRect = (RectTransform)_responsePromptText.transform;
         promptRect.anchorMin = new Vector2(0f, 1f);
         promptRect.anchorMax = new Vector2(1f, 1f);
-        promptRect.pivot = new Vector2(0.5f, 1f);
-        promptRect.anchoredPosition = Vector2.zero;
+        promptRect.pivot = new Vector2(0f, 1f);
+        promptRect.anchoredPosition = new Vector2(240f, -120f);
         promptRect.sizeDelta = new Vector2(0f, 70f);
 
         RectTransform inputRect = CreateRectTransform("ResponseInputField", responseRect);
@@ -234,11 +234,11 @@ public class RuntimeDialogueUI : MonoBehaviour
         _responseInputField.transition = Selectable.Transition.None;
 
         _responseInputText = CreateText("ResponseInputText", inputRect, 42, Color.white, TextAnchor.UpperLeft);
-        StretchRect((RectTransform)_responseInputText.transform);
+        StretchRect((RectTransform)_responseInputText.transform, new Vector2(240f, 0f), new Vector2(0f, -215f));
 
         _responsePlaceholderText = CreateText("ResponsePlaceholder", inputRect, 38, new Color(1f, 0.82f, 0.91f, 0.7f), TextAnchor.UpperLeft);
         _responsePlaceholderText.fontStyle = FontStyle.Italic;
-        StretchRect((RectTransform)_responsePlaceholderText.transform);
+        StretchRect((RectTransform)_responsePlaceholderText.transform, new Vector2(240f, 0f), new Vector2(0f, -215f));
 
         _responseInputField.textComponent = _responseInputText;
         _responseInputField.placeholder = _responsePlaceholderText;
