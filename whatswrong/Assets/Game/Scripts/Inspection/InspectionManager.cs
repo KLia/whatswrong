@@ -8,7 +8,6 @@ namespace Game.Scripts
         [SerializeField] private RoomInteractionController roomInteractionController;
         [SerializeField] private InspectionDatabase inspectionDatabase;
         [SerializeField] private InspectionScreen inspectionScreen;
-        [SerializeField] private BackgroundBlurController blurController;
         [SerializeField] private GameManager gameManager;
 
         private void OnEnable()

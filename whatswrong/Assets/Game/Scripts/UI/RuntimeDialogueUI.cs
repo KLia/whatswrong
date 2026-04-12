@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Game.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -360,7 +361,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
     private void ShowResponseInput()
     {
-        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : DialogueInteractable.SpeakerColor.Pink);
+        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : SpeakerColor.Pink);
 
         _dialogueText.gameObject.SetActive(false);
         SetContinueBoxVisible(false);
@@ -458,7 +459,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         var replyLine = new DialogueInteractable.DialogueLine
         {
-            speakerColor = DialogueInteractable.SpeakerColor.Blue,
+            speakerColor = SpeakerColor.Blue,
             requestManualResponseAfterLine = false,
             text = replyText
         };
@@ -531,12 +532,12 @@ public class RuntimeDialogueUI : MonoBehaviour
         _continueBoxRect.gameObject.SetActive(isVisible);
     }
 
-    private void ApplyDialogueColor(DialogueInteractable.SpeakerColor speakerColor)
+    private void ApplyDialogueColor(SpeakerColor speakerColor)
     {
         _dialogueText.color = ResolveSpeakerColor(speakerColor);
     }
 
-    private void ApplyResponseColors(DialogueInteractable.SpeakerColor speakerColor)
+    private void ApplyResponseColors(SpeakerColor speakerColor)
     {
         Color speakerColorValue = ResolveSpeakerColor(speakerColor);
         Color placeholderColor = speakerColorValue;
@@ -547,9 +548,9 @@ public class RuntimeDialogueUI : MonoBehaviour
         _responsePlaceholderText.color = placeholderColor;
     }
 
-    private static Color ResolveSpeakerColor(DialogueInteractable.SpeakerColor speakerColor)
+    private static Color ResolveSpeakerColor(SpeakerColor speakerColor)
     {
-        return speakerColor == DialogueInteractable.SpeakerColor.Blue
+        return speakerColor == SpeakerColor.Blue
             ? BlueSpeakerColor
             : PinkSpeakerColor;
     }

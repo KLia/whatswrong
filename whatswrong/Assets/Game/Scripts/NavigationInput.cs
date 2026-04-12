@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Game.Scripts
 {
-    public class InputMapping : MonoBehaviour
+    public class NavigationInput : MonoBehaviour
     {
         [SerializeField] private NavigationControls navigationControls;
         public event Action NextRoom;
@@ -16,8 +16,6 @@ namespace Game.Scripts
         public event Action MoveRightStarted;
         public event Action MoveRightStopped;
 
-        public event Action Inspect;
-        public event Action Outspect;
 
         private bool _leftWasPressed;
         private bool _rightWasPressed;
@@ -52,15 +50,6 @@ namespace Game.Scripts
             MoveLeftStarted?.Invoke();
         }
 
-        private void OnObjectClicked()
-        {
-            Inspect?.Invoke();
-        }
-
-        private void OnAnywhereClicked()
-        {
-            Outspect?.Invoke();
-        }
 
         private void Start()
         {
@@ -93,20 +82,7 @@ namespace Game.Scripts
 
                 _leftWasPressed = leftPressed;
                 _rightWasPressed = rightPressed;
-                if (keyboard.escapeKey.wasPressedThisFrame)
-                {
-                    OnAnywhereClicked();
-                }
-            }
-
-
-            Mouse mouse = Mouse.current;
-            if (mouse != null)
-            {
-                if (mouse.leftButton.wasPressedThisFrame)
-                {
-                    OnObjectClicked();
-                }
+               
             }
         }
 

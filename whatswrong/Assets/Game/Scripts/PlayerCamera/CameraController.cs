@@ -8,7 +8,7 @@ namespace Game.Scripts
         [SerializeField] private SpriteRenderer backgroundRenderer;
 
         private float _moveDirection;
-        private InputMapping _input;
+        private NavigationInput _navigationInput;
         private Vector3 _initialPosition;
 
         private float _minX;
@@ -63,21 +63,21 @@ namespace Game.Scripts
             _moveDirection = 0f;
         }
 
-        public void Initialize(InputMapping inputMapping)
+        public void Initialize(NavigationInput navigationInput)
         {
-            if (_input == inputMapping)
+            if (_navigationInput == navigationInput)
                 return;
 
             UnsubscribeInput();
-            _input = inputMapping;
+            _navigationInput = navigationInput;
 
-            if (_input == null)
+            if (_navigationInput == null)
                 return;
 
-            _input.MoveLeftStarted += OnMoveLeftStarted;
-            _input.MoveLeftStopped += OnMoveLeftStopped;
-            _input.MoveRightStarted += OnMoveRightStarted;
-            _input.MoveRightStopped += OnMoveRightStopped;
+            _navigationInput.MoveLeftStarted += OnMoveLeftStarted;
+            _navigationInput.MoveLeftStopped += OnMoveLeftStopped;
+            _navigationInput.MoveRightStarted += OnMoveRightStarted;
+            _navigationInput.MoveRightStopped += OnMoveRightStopped;
         }
 
         public void OnMoveLeftStarted()
@@ -121,14 +121,14 @@ namespace Game.Scripts
 
         private void UnsubscribeInput()
         {
-            if (_input == null)
+            if (_navigationInput == null)
                 return;
 
-            _input.MoveLeftStarted -= OnMoveLeftStarted;
-            _input.MoveLeftStopped -= OnMoveLeftStopped;
-            _input.MoveRightStarted -= OnMoveRightStarted;
-            _input.MoveRightStopped -= OnMoveRightStopped;
-            _input = null;
+            _navigationInput.MoveLeftStarted -= OnMoveLeftStarted;
+            _navigationInput.MoveLeftStopped -= OnMoveLeftStopped;
+            _navigationInput.MoveRightStarted -= OnMoveRightStarted;
+            _navigationInput.MoveRightStopped -= OnMoveRightStopped;
+            _navigationInput = null;
         }
 
         public void OnBeforeSceneLoad()

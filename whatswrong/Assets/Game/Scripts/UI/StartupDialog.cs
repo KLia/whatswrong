@@ -43,7 +43,6 @@ namespace Game.Scripts
 
             descriptionText.text = text;
             descriptionText.color = color;
-
         }
 
         private void Hide()

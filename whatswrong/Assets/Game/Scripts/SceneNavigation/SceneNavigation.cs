@@ -18,17 +18,17 @@ namespace Game.Scripts
 
         private bool _isSwitching = false;
         private SceneLoader _sceneLoader;
-        private InputMapping _input;
+        private NavigationInput _navigationInput;
 
         private void Awake()
         {
             _sceneLoader = FindAnyObjectByType<SceneLoader>(FindObjectsInactive.Include);
-            _input = FindAnyObjectByType<InputMapping>();
+            _navigationInput = FindAnyObjectByType<NavigationInput>();
 
-            if (_input != null)
+            if (_navigationInput != null)
             {
-                _input.NextRoom += ShowNext;
-                _input.PreviousRoom += ShowPrevious;
+                _navigationInput.NextRoom += ShowNext;
+                _navigationInput.PreviousRoom += ShowPrevious;
             }
 
             BuildSceneList();
@@ -129,10 +129,10 @@ namespace Game.Scripts
 
         private void OnDestroy()
         {
-            if (_input != null)
+            if (_navigationInput != null)
             {
-                _input.NextRoom -= ShowNext;
-                _input.PreviousRoom -= ShowPrevious;
+                _navigationInput.NextRoom -= ShowNext;
+                _navigationInput.PreviousRoom -= ShowPrevious;
             }
         }
     }
