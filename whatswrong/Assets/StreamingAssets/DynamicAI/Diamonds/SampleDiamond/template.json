@@ -1,0 +1,49 @@
+{
+  "name": "Distressed Daddy Guessing Game Reply",
+  "description": "Generates a sad, distant in-character reply from a distressed husband (“daddy”) indicating whether the girlfriends guess is close to the true reason, and outputs a game_over flag when she guessed correctly at 3/3 clues.",
+  "language": "en-US",
+  "prompt": " I am your girlfriend and you are my daddy. I am trying to figure out what's your with you.\\nYou will receive the true reason for why you're distressed, and my guess.\\nYour task is to give me a reply, in a sad distant tone of whether I'm close or not. The reply should be phrased in a way that strongly reflects your personality. \\nYou will also give me a string value (game_over) - whether I have guess or not.\\n\",\n  ",
+  "version": "1.0.1",
+  "input": [
+    {
+      "type": "string",
+      "min": 1,
+      "max": 10000,
+      "name": "daddy",
+      "description": "Daddys full description/personality to emulate in voice and tone."
+    },
+    {
+      "type": "string",
+      "min": 1,
+      "max": 10000,
+      "name": "reason",
+      "description": "The actual (ground-truth) reason daddy is distressed."
+    },
+    {
+      "type": "string",
+      "min": 1,
+      "max": 10000,
+      "name": "guess",
+      "description": "The girlfriends guess about why daddy is distressed."
+    },
+    {
+      "type": "string",
+      "min": 1,
+      "max": 10000,
+      "name": "clues_revealed",
+      "description": "How many clues (out of 3) the girlfriend has collected (e.g., '0/3', '1/3', '2/3', '3/3')."
+    }
+  ],
+  "output": [
+    {
+      "type": "string",
+      "name": "daddys_reply",
+      "description": "Daddys reply in a sad, distant tone, strongly reflecting his personality. If clues_revealed is not 3/3: first-person, begins with \"Nothing ...\", evasive, vague hint only, no direct reveal; 1–2 sentences. If clues_revealed is 3/3 and the guess is correct: daddy fully opens up and states the true reason; 1–2 sentences."
+    },
+    {
+      "type": "string",
+      "name": "game_over",
+      "description": "True or False indicating whether clues_revealed is 3/3 AND the guess is correct."
+    }
+  ]
+}
