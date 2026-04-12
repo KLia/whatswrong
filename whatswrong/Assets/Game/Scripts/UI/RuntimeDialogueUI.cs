@@ -54,6 +54,7 @@ public class RuntimeDialogueUI : MonoBehaviour
     private DialoguePhase _phase = DialoguePhase.Hidden;
     private int _currentLineIndex = -1;
     private int _ignoreAdvanceFrame = -1;
+    private bool _responseSubmittedForCurrentLine;
 
     public static bool IsBlockingInput => _instance != null && _instance._phase != DialoguePhase.Hidden;
 
@@ -268,6 +269,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         _currentSource = source;
         _currentLineIndex = -1;
         _ignoreAdvanceFrame = Time.frameCount;
+        _responseSubmittedForCurrentLine = false;
 
         _panelRect.gameObject.SetActive(true);
         _panelImage.sprite = source.DialogueBoxSprite;
@@ -336,6 +338,7 @@ public class RuntimeDialogueUI : MonoBehaviour
     private void ShowNextLine()
     {
         _currentLineIndex++;
+        _responseSubmittedForCurrentLine = false;
 
         if (_currentLineIndex < 0 || _currentLineIndex >= _activeLines.Count)
         {
@@ -442,6 +445,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         _currentSource.RegisterSubmittedResponse(submittedText);
+        _responseSubmittedForCurrentLine = true;
 
         if (_currentLineIndex < _activeLines.Count - 1)
         {
@@ -453,7 +457,10 @@ public class RuntimeDialogueUI : MonoBehaviour
             return;
         }
 
-        HideDialogue();
+        _responseInputField.DeactivateInputField();
+        _phase = DialoguePhase.WaitingForAdvance;
+        _ignoreAdvanceFrame = Time.frameCount;
+        SetContinueBoxVisible(true);
     }
 
     private void HideDialogue()
@@ -464,6 +471,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         _currentLineIndex = -1;
         _currentSource = null;
         _activeLines.Clear();
+        _responseSubmittedForCurrentLine = false;
 
         if (_panelRect != null)
         {
@@ -496,7 +504,8 @@ public class RuntimeDialogueUI : MonoBehaviour
             return false;
         }
 
-        return _currentSource.ShouldRequestManualResponse(_activeLines[_currentLineIndex]);
+        return !_responseSubmittedForCurrentLine &&
+               _currentSource.ShouldRequestManualResponse(_activeLines[_currentLineIndex]);
     }
 
     private void SetContinueBoxVisible(bool isVisible)
