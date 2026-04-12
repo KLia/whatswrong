@@ -9,7 +9,7 @@ namespace Game.Scripts
         [SerializeField] private Camera roomCamera;
         [SerializeField] private LayerMask inspectableLayerMask;
 
-        public event Action<string> InspectRequested;
+        public event Action<InspectionData> InspectRequested;
         public event Action OutspectRequested;
         
         private bool inspecting;
@@ -54,7 +54,7 @@ namespace Game.Scripts
                 return;
             }
 
-            InspectRequested?.Invoke(hotspot.ObjectId);
+            InspectRequested?.Invoke(hotspot.Data);
         }
     }
 }

@@ -4,8 +4,8 @@ namespace Game.Scripts
 {
     public class InspectableHotspot : MonoBehaviour
     {
-        [SerializeField] private string objectId;
+        [SerializeField] private InspectionData data;
 
-        public string ObjectId => objectId;
+        public InspectionData Data => data;
     }
 }

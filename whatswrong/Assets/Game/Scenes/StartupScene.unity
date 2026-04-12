@@ -825,6 +825,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InspectionScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 7186076203761671437, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8339817684545847488, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

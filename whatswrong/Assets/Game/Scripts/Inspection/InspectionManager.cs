@@ -29,18 +29,17 @@ namespace Game.Scripts
             roomInteractionController.OutspectRequested -= CloseInspection;
         }
 
-        private void OpenInspection(string objectId)
+        private void OpenInspection(InspectionData data)
         {
-            InspectionData data = inspectionDatabase.GetById(objectId);
             if (data == null)
             {
-                Debug.LogWarning($"No inspection data found for id: {objectId}");
+                Debug.LogWarning($"No inspection data attached to object.");
                 return;
             }
 
             roomInteractionController.SetInteractionEnabled(false);
 
-            data.Description = gameManager.RevealClue(objectId);
+            data.Description = gameManager.RevealClue(data.id);
             inspectionScreen.Show(data);
         }
 
