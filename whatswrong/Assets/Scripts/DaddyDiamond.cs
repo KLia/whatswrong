@@ -102,7 +102,7 @@ public class DaddyDiamond : MonoBehaviour
 
         if (game_over == null)
         {
-            game_over = "False";
+            game_over = "no";
         }
 
         // In this example I'm using a Dictionary to keep both key and values

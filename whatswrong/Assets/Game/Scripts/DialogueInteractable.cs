@@ -123,7 +123,8 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
             $"{gameManager.CluesRevealed}/3");
         
         gameManager.EndSceneTriggered = reply[DiamondConstants.OUTPUT_GAME_OVER] == "True" || 
-                                        reply[DiamondConstants.OUTPUT_GAME_OVER] =="Yes";
+                                        reply[DiamondConstants.OUTPUT_GAME_OVER] == "Yes" || 
+                                        reply[DiamondConstants.OUTPUT_GAME_OVER] == "yes";
         onUserResponseSubmitted?.Invoke(reply[DiamondConstants.OUTPUT_REPLY]);
     }
 
