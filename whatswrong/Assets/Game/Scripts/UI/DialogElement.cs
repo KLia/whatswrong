@@ -7,6 +7,6 @@ namespace Game.Scripts
     public class DialogElement
     {
         [SerializeField] public string text;
-        [SerializeField] public Color color;
+        [SerializeField] public SpeakerColor speakerColor;
     }
 }

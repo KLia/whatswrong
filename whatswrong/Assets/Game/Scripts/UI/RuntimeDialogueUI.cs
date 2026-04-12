@@ -349,7 +349,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         DialogueInteractable.DialogueLine line = _activeLines[_currentLineIndex];
-        ApplyDialogueColor(line.speakerColor);
+        _dialogueText.color = SpeakerColorMappings.GetColor(line.speakerColor);
 
         _responseRoot.SetActive(false);
         _dialogueText.gameObject.SetActive(true);
@@ -532,27 +532,15 @@ public class RuntimeDialogueUI : MonoBehaviour
         _continueBoxRect.gameObject.SetActive(isVisible);
     }
 
-    private void ApplyDialogueColor(SpeakerColor speakerColor)
-    {
-        _dialogueText.color = ResolveSpeakerColor(speakerColor);
-    }
-
     private void ApplyResponseColors(SpeakerColor speakerColor)
     {
-        Color speakerColorValue = ResolveSpeakerColor(speakerColor);
+        Color speakerColorValue = SpeakerColorMappings.GetColor(speakerColor);
         Color placeholderColor = speakerColorValue;
         placeholderColor.a = 0.6f;
 
         _responsePromptText.color = speakerColorValue;
         _responseInputText.color = speakerColorValue;
         _responsePlaceholderText.color = placeholderColor;
-    }
-
-    private static Color ResolveSpeakerColor(SpeakerColor speakerColor)
-    {
-        return speakerColor == SpeakerColor.Blue
-            ? BlueSpeakerColor
-            : PinkSpeakerColor;
     }
 
     private void EnsureEventSystemExists()

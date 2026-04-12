@@ -1549,22 +1549,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f970b0513184ad5944d1d0b85e6d5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.StartupDialog
+  speakerColorMappings: {fileID: 11400000, guid: 4b773192045605f4bb7da6281fd41373, type: 2}
   dialogLines:
   - text: What's wrong daddy?
+    speakerColor: 2
     color: {r: 0.1882353, g: 0.682353, b: 0.7490196, a: 1}
   - text: Nothing...
+    speakerColor: 1
     color: {r: 0.7803922, g: 0.08235294, b: 0.5215687, a: 1}
   - text: He says it's nothing.
+    speakerColor: 0
     color: {r: 0.854902, g: 0.6470588, b: 0.1254902, a: 1}
   - text: It's never nothing.
+    speakerColor: 0
     color: {r: 0.854902, g: 0.6470588, b: 0.1254902, a: 1}
   - text: "Search the house.\_open drawers, read what he left behind, trace the cracks
       he tried to cover."
+    speakerColor: 0
     color: {r: 0.854902, g: 0.6470588, b: 0.1254902, a: 1}
   - text: 'Three clues lie scattered in silence. Find them, look him in the eyes
       and say what he can''t. '
+    speakerColor: 0
     color: {r: 0.854902, g: 0.6470588, b: 0.1254902, a: 1}
   - text: Maybe then daddy will finally let you in.
+    speakerColor: 0
     color: {r: 0.854902, g: 0.6470588, b: 0.1254902, a: 1}
   contentCanvasGroup: {fileID: 1833574580}
   root: {fileID: 766782000}
