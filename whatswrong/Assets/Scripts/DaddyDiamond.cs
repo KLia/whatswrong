@@ -45,12 +45,12 @@ public class DaddyDiamond : MonoBehaviour
         }
     }
 
-    private async Task<Dictionary<string, string>> InvokeReplyAsync(string daddy, string guess, string reason)
+    public async Task<Dictionary<string, string>> InvokeReplyAsync(string daddy, string guess, string reason)
     {
         return await Task.Run(() => InvokeReply(daddy, guess, reason));
     }
 
-    private Dictionary<string, string> InvokeReply(string daddy, string guess, string reason)
+    public Dictionary<string, string> InvokeReply(string daddy, string guess, string reason)
     {
         if (_textModule == null)
         {

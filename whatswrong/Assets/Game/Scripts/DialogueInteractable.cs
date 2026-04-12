@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -6,6 +7,8 @@ using UnityEngine.EventSystems;
 [DisallowMultipleComponent]
 public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
 {
+    public DaddyDiamond diamond;
+    
     public enum SpeakerColor
     {
         Pink = 0,
@@ -103,7 +106,15 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
     internal void RegisterSubmittedResponse(string submittedText)
     {
         lastSubmittedText = submittedText ?? string.Empty;
-        onUserResponseSubmitted?.Invoke(lastSubmittedText);
+        
+        if (string.IsNullOrWhiteSpace(submittedText))
+            return;
+
+        //TODO: get the reason and daddy from the static class
+        var reply =  diamond.InvokeReply("Aries daddy", 
+            lastSubmittedText,
+            "His new colleague is annoying and daddy thinks he's an idiot");
+        onUserResponseSubmitted?.Invoke(reply[DiamondConstants.OUTPUT_REPLY]);
     }
 
     private void TryOpenDialogue()
@@ -128,4 +139,5 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
 
         RuntimeDialogueUI.ShowDialogue(this);
     }
+
 }
