@@ -19,6 +19,11 @@ namespace Game.Scripts
         private bool inspecting;
         private bool isHovering;
 
+        private void Awake()
+        {
+            Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
+        }
+
         public void SetInteractionEnabled(bool enabled)
         {
             inspecting = !enabled;
