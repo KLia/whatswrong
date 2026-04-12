@@ -297,10 +297,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1558759929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 259ff2ad57e46964b86cc4c4b16cdaed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ce64d63b5b15a042be5d0619652ddde, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DiamondExample
-  _diamondName: SimpleDiamond
+  m_EditorClassIdentifier: Assembly-CSharp::DaddyDiamond
+  _diamondName: SampleDiamond
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

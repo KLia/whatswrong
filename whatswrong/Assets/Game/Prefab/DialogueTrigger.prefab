@@ -56,6 +56,8 @@ MeshRenderer:
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
@@ -123,10 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0e429370fc4a3ab59ad89f26190829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueInteractable
+  diamond: {fileID: 0}
   lines: []
   allowUserResponse: 1
   responseSpeakerColor: 1
-  responsePrompt: Type your reply:
+  responsePrompt: 
   responsePlaceholder: Type your answer and press Enter
   dialogueBoxSprite: {fileID: 7759203275400101001, guid: 6e5a4f8d2c2d4ce6985cf3d1de8f1b01, type: 3}
   continueBoxSprite: {fileID: 6097743321100854301, guid: 0af8cf6a2f1e4745b2b8f7ce0ea4bc36, type: 3}
@@ -135,4 +138,16 @@ MonoBehaviour:
   lastSubmittedText: 
   onUserResponseSubmitted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9146283612644853074}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
