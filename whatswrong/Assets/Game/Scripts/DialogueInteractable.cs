@@ -48,7 +48,7 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
 
     [Header("Debug")]
     [SerializeField] private string lastSubmittedText = string.Empty;
-    [SerializeField] private ResponseSubmittedEvent onUserResponseSubmitted = new ResponseSubmittedEvent();
+    [SerializeField] public ResponseSubmittedEvent onUserResponseSubmitted = new ResponseSubmittedEvent();
 
     private int _lastActivationFrame = -1;
 

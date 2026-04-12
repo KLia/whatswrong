@@ -217,8 +217,8 @@ public class RuntimeDialogueUI : MonoBehaviour
         RectTransform promptRect = (RectTransform)_responsePromptText.transform;
         promptRect.anchorMin = new Vector2(0f, 1f);
         promptRect.anchorMax = new Vector2(1f, 1f);
-        promptRect.pivot = new Vector2(0.5f, 1f);
-        promptRect.anchoredPosition = Vector2.zero;
+        promptRect.pivot = new Vector2(0f, 1f);
+        promptRect.anchoredPosition = new Vector2(240f, -120f);
         promptRect.sizeDelta = new Vector2(0f, 70f);
 
         RectTransform inputRect = CreateRectTransform("ResponseInputField", responseRect);
@@ -234,11 +234,11 @@ public class RuntimeDialogueUI : MonoBehaviour
         _responseInputField.transition = Selectable.Transition.None;
 
         _responseInputText = CreateText("ResponseInputText", inputRect, 42, Color.white, TextAnchor.UpperLeft);
-        StretchRect((RectTransform)_responseInputText.transform);
+        StretchRect((RectTransform)_responseInputText.transform, new Vector2(240f, 0f), new Vector2(0f, -215f));
 
         _responsePlaceholderText = CreateText("ResponsePlaceholder", inputRect, 38, new Color(1f, 0.82f, 0.91f, 0.7f), TextAnchor.UpperLeft);
         _responsePlaceholderText.fontStyle = FontStyle.Italic;
-        StretchRect((RectTransform)_responsePlaceholderText.transform);
+        StretchRect((RectTransform)_responsePlaceholderText.transform, new Vector2(240f, 0f), new Vector2(0f, -215f));
 
         _responseInputField.textComponent = _responseInputText;
         _responseInputField.placeholder = _responsePlaceholderText;
@@ -267,6 +267,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         _currentSource = source;
+        _currentSource.onUserResponseSubmitted.AddListener(OnDiamondReply);
         _currentLineIndex = -1;
         _ignoreAdvanceFrame = Time.frameCount;
         _responseSubmittedForCurrentLine = false;
@@ -446,21 +447,29 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         _currentSource.RegisterSubmittedResponse(submittedText);
         _responseSubmittedForCurrentLine = true;
+    }
 
-        if (_currentLineIndex < _activeLines.Count - 1)
+    private void OnDiamondReply(string replyText)
+    {
+        if (string.IsNullOrWhiteSpace(replyText))
         {
-            _responseRoot.SetActive(false);
-            _dialogueText.gameObject.SetActive(true);
-            SetContinueBoxVisible(false);
-            _ignoreAdvanceFrame = Time.frameCount;
-            ShowNextLine();
             return;
         }
 
-        _responseInputField.DeactivateInputField();
-        _phase = DialoguePhase.WaitingForAdvance;
+        var replyLine = new DialogueInteractable.DialogueLine
+        {
+            speakerColor = DialogueInteractable.SpeakerColor.Blue,
+            requestManualResponseAfterLine = false,
+            text = replyText
+        };
+
+        _activeLines.Add(replyLine);
+
+        _responseRoot.SetActive(false);
+        _dialogueText.gameObject.SetActive(true);
+        SetContinueBoxVisible(false);
         _ignoreAdvanceFrame = Time.frameCount;
-        SetContinueBoxVisible(true);
+        ShowNextLine();
     }
 
     private void HideDialogue()
@@ -469,6 +478,10 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         _phase = DialoguePhase.Hidden;
         _currentLineIndex = -1;
+        if (_currentSource != null)
+        {
+            _currentSource.onUserResponseSubmitted.RemoveListener(OnDiamondReply);
+        }
         _currentSource = null;
         _activeLines.Clear();
         _responseSubmittedForCurrentLine = false;
