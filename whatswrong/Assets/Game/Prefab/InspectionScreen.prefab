@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 8339817684545847488}
   - component: {fileID: 4753742290701525034}
   - component: {fileID: 6589691176786715864}
+  - component: {fileID: 5272371606982854592}
   m_Layer: 5
   m_Name: InspectionScreen
   m_TagString: Untagged
@@ -137,6 +138,20 @@ MonoBehaviour:
   root: {fileID: 7186076203761671437}
   descriptionText: {fileID: 7375685535441432033}
   image: {fileID: 2449668858398461339}
+  startScale: {x: 0.5, y: 0.5, z: 0.5}
+  scaleDuration: 0.25
+--- !u!225 &5272371606982854592
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7186076203761671437}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &8792584605279465967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,6 +238,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1382765926235733285, guid: 34fc85c1a91257442b400b25a0f7b764, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4517331086630395557, guid: 34fc85c1a91257442b400b25a0f7b764, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5455845459818234258, guid: 34fc85c1a91257442b400b25a0f7b764, type: 3}

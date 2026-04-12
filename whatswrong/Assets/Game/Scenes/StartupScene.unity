@@ -813,14 +813,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1893269061}
     m_Modifications:
-    - target: {fileID: 633421730829701188, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 5272371606982854592, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
+      propertyPath: m_Alpha
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4950935578665234250, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 6589691176786715864, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
+      propertyPath: contentCanvasGroup
+      value: 
+      objectReference: {fileID: 1367105822}
     - target: {fileID: 7186076203761671437, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
       propertyPath: m_Name
       value: InspectionScreen
@@ -1045,6 +1045,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   nextButton: {fileID: 432043459}
   previousButton: {fileID: 1983158591}
+--- !u!225 &1367105822 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 5272371606982854592, guid: 06e310ddfa97fcb4ea46f5e92728702b, type: 3}
+  m_PrefabInstance: {fileID: 1241917232}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1429911228
 GameObject:
   m_ObjectHideFlags: 0

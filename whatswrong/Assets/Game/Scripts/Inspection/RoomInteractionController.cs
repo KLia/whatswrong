@@ -11,12 +11,29 @@ namespace Game.Scripts
 
         public event Action<string> InspectRequested;
         public event Action OutspectRequested;
+        
+        private bool inspecting;
+        
+        public void SetInteractionEnabled(bool enabled)
+        {
+            inspecting = !enabled;
+        }
 
+        
         private void Update()
         {
+            
             Mouse mouse = Mouse.current;
             if (mouse == null || !mouse.leftButton.wasPressedThisFrame)
                 return;
+           
+            if (inspecting)
+            {
+                // Allow closing, but block new inspections
+                OutspectRequested?.Invoke();
+                return;
+            }
+            
 
             Vector2 screenPosition = mouse.position.ReadValue();
             Vector3 worldPosition3 = roomCamera.ScreenToWorldPoint(screenPosition);
