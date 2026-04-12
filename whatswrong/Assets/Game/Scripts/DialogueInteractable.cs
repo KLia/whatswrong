@@ -118,7 +118,7 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
         //TODO: get the reason and daddy from the static class
         var reply =  diamond.InvokeReply(
             gameManager.DaddyPersonality, 
-            lastSubmittedText,
+            "Daddy, what's wrong with you? Is it because " + lastSubmittedText,
             gameManager.DaddyReason, 
             $"{gameManager.CluesRevealed}/3");
         
