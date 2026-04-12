@@ -9,31 +9,31 @@ namespace Game.Scripts
         [SerializeField] private Camera roomCamera;
         [SerializeField] private LayerMask inspectableLayerMask;
 
+        [SerializeField] private Texture2D defaultCursor;
+        [SerializeField] private Texture2D hoverCursor;
+        [SerializeField] private Vector2 hotspot = Vector2.zero;
+
         public event Action<InspectionData> InspectRequested;
         public event Action OutspectRequested;
-        
+
         private bool inspecting;
-        
+        private bool isHovering;
+
         public void SetInteractionEnabled(bool enabled)
         {
             inspecting = !enabled;
-        }
 
-        
-        private void Update()
-        {
-            
-            Mouse mouse = Mouse.current;
-            if (mouse == null || !mouse.leftButton.wasPressedThisFrame)
-                return;
-           
             if (inspecting)
             {
-                // Allow closing, but block new inspections
-                OutspectRequested?.Invoke();
-                return;
+                SetCursor(false);
             }
-            
+        }
+
+        private void Update()
+        {
+            Mouse mouse = Mouse.current;
+            if (mouse == null)
+                return;
 
             Vector2 screenPosition = mouse.position.ReadValue();
             Vector3 worldPosition3 = roomCamera.ScreenToWorldPoint(screenPosition);
@@ -41,20 +41,51 @@ namespace Game.Scripts
 
             Collider2D hit = Physics2D.OverlapPoint(worldPosition2, inspectableLayerMask);
 
-            if (hit == null)
+            bool hoveringInspectable = false;
+            InspectableHotspot hotspotComponent = null;
+
+            if (!inspecting && hit != null)
+            {
+                hotspotComponent = hit.GetComponent<InspectableHotspot>();
+                hoveringInspectable = hotspotComponent != null;
+            }
+
+            SetCursor(hoveringInspectable);
+
+            if (!mouse.leftButton.wasPressedThisFrame)
+                return;
+
+            if (inspecting)
             {
                 OutspectRequested?.Invoke();
                 return;
             }
 
-            InspectableHotspot hotspot = hit.GetComponent<InspectableHotspot>();
-            if (hotspot == null)
+            if (hotspotComponent != null)
             {
-                OutspectRequested?.Invoke();
+                InspectRequested?.Invoke(hotspotComponent.Data);
                 return;
             }
 
-            InspectRequested?.Invoke(hotspot.Data);
+            OutspectRequested?.Invoke();
+        }
+
+        private void SetCursor(bool hovering)
+        {
+            if (isHovering == hovering)
+                return;
+
+            isHovering = hovering;
+
+            Cursor.SetCursor(
+                hovering ? hoverCursor : defaultCursor,
+                hotspot,
+                CursorMode.Auto);
+        }
+
+        private void OnDisable()
+        {
+            SetCursor(false);
         }
     }
 }
