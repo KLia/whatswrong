@@ -115,6 +115,12 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
         if (string.IsNullOrWhiteSpace(submittedText))
             return;
 
+        if (gameManager.CluesRevealed == 0)
+        {
+            onUserResponseSubmitted?.Invoke("... *nothing* ...");
+            return;
+        }
+
         //TODO: get the reason and daddy from the static class
         var reply =  diamond.InvokeReply(
             gameManager.DaddyPersonality, 

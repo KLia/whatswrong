@@ -98,7 +98,7 @@ public class DaddyDiamond : MonoBehaviour
         // In the same way as with inputs, we get the string values of each of the outputs by
         // using the correct key value.
         var reply = textResult.GetString(DiamondConstants.OUTPUT_REPLY);
-        var game_over = textResult.GetString(DiamondConstants.OUTPUT_GAME_OVER);
+         var game_over = textResult.GetString(DiamondConstants.OUTPUT_GAME_OVER);
 
         if (game_over == null)
         {
