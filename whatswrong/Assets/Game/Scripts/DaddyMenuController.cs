@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using System.IO;
+using DefaultNamespace;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -10,63 +14,75 @@ public class DaddyMenuController : MonoBehaviour
     private const int UiLayer = 5;
     private const string StartupSceneName = "StartupScene";
 
-    private readonly List<DaddyProfile> _profiles = new List<DaddyProfile>();
+    private List<string> _daddyNames = new List<string>();
 
     private void Awake()
     {
         EnsureEventSystemExists();
-        BuildProfiles();
+        LoadDaddies();
         BuildUI();
 
-        if (_profiles.Count > 0)
-            GameSetup.Daddy = _profiles[0];
+        if (_daddyNames.Count > 0)
+            GameSetup.ChosenDaddyName = _daddyNames[0];
     }
 
-    private void BuildProfiles()
+    private void LoadDaddies()
     {
-        AddProfile("Aries Daddy - Firefighter",
-            "Personality: Acts first, thinks later, but somehow always lands on his feet. Protective in a way that feels like heat... intense, immediate, undeniable. | North Star: Action above all | Secondary Trait: Impatient with emotional nuance | Non-Negotiable: Never abandons someone in danger | Fatal Flaw: Rushes in without thinking, creates bigger disasters");
+        string path = Path.Combine(Application.streamingAssetsPath, "daddies.json");
+        if (!File.Exists(path))
+        {
+            Debug.LogError("daddies.json not found at " + path);
+            return;
+        }
 
-        AddProfile("Taurus Daddy - Luxury Chef",
-            "Personality: Moves slow, chooses carefully, indulges deeply. Shows love through touch, food, and presence you can lean into. | North Star: Stability and comfort | Secondary Trait: Deep possessiveness | Non-Negotiable: Protects what he considers \"his\" | Fatal Flaw: Refuses change, even when everything is crumbling");
+        string json = File.ReadAllText(path);
+        JObject root = JObject.Parse(json);
+        JObject daddiesObj = (JObject)root["daddies"];
 
-        AddProfile("Gemini Daddy - Writer",
-            "Personality: Words are his playground and his weapon. Keeps you guessing whether hes joking, flirting... or both. | North Star: Curiosity and stimulation | Secondary Trait: Avoidance of emotional depth | Non-Negotiable: Freedom to express himself | Fatal Flaw: Deflects truth with humor until nothing feels real");
+        var daddies = new Dictionary<string, Daddy>();
 
-        AddProfile("Cancer Daddy - Therapist (Soft Dom)",
-            "Personality: Reads you gently, holds you firmly, never lets you fall too far. Control wrapped in care, guidance that feels like home. | North Star: Emotional safety (for others) | Secondary Trait: Fear of vulnerability (for himself) | Non-Negotiable: Protects those he loves at all costs | Fatal Flaw: Over-gives, loses himself, then quietly resents it");
+        foreach (var kvp in daddiesObj)
+        {
+            string daddyName = kvp.Key;
+            JObject entry = (JObject)kvp.Value;
 
-        AddProfile("Leo Daddy - Actor",
-            "Personality: Thrives in attention but gives it back tenfold. Makes you feel chosen, seen, and a little bit worshipped. | North Star: To be adored and remembered | Secondary Trait: Genuine generosity | Non-Negotiable: Will not be ignored or disrespected | Fatal Flaw: Needs validation so badly it clouds his judgment");
+            var daddy = new Daddy
+            {
+                Name = daddyName,
+                Personality = entry["personality"]?.ToString() ?? "",
+                Reason = new List<Reason>()
+            };
 
-        AddProfile("Virgo Daddy - Doctor Surgeon",
-            "Personality: Observes everything, misses nothing, fixes whats broken. Quiet control, expressed through perfection and intention. | North Star: Perfection and order | Secondary Trait: Deep internal anxiety | Non-Negotiable: Mistakes are unacceptable | Fatal Flaw: Self-criticism so harsh it becomes paralyzing");
+            JArray dataArray = (JArray)entry["data"];
+            if (dataArray != null)
+            {
+                foreach (JObject reasonObj in dataArray)
+                {
+                    var reason = new Reason
+                    {
+                        ReasonText = reasonObj["reason"]?.ToString() ?? ""
+                    };
 
-        AddProfile("Libra Daddy - Art Curator",
-            "Personality: Lives for beauty, balance, and shared moments. Flirts like its an art form... and youre the masterpiece. | North Star: Harmony and connection | Secondary Trait: Fear of conflict | Non-Negotiable: Keeps the peace at all costs | Fatal Flaw: Avoids hard choices until everything collapses");
+                    JArray objects = (JArray)reasonObj["objects"];
+                    if (objects != null && objects.Count >= 3)
+                    {
+                        reason.Object1 = objects[0]["name"]?.ToString() ?? "";
+                        reason.Hint1 = objects[0]["hint"]?.ToString() ?? "";
+                        reason.Object2 = objects[1]["name"]?.ToString() ?? "";
+                        reason.Hint2 = objects[1]["hint"]?.ToString() ?? "";
+                        reason.Object3 = objects[2]["name"]?.ToString() ?? "";
+                        reason.Hint3 = objects[2]["hint"]?.ToString() ?? "";
+                    }
 
-        AddProfile("Scorpio Daddy - Police Detective",
-            "Personality: Sees through lies, silence, and surface-level truths. Intensity simmers beneath stillness, pulling you in without effort. | North Star: Truth and emotional depth | Secondary Trait: Extreme secrecy | Non-Negotiable: Betrayal is unforgivable | Fatal Flaw: Obsession that consumes him and others");
+                    daddy.Reason.Add(reason);
+                }
+            }
 
-        AddProfile("Sagittarius Daddy - Travel Photographer",
-            "Personality: Restless soul, always chasing the next horizon. Connection with him feels like freedom... not confinement. | North Star: Freedom and exploration | Secondary Trait: Difficulty committing | Non-Negotiable: Will never feel trapped | Fatal Flaw: Runs when things start to matter too much");
+            daddies[daddyName] = daddy;
+        }
 
-        AddProfile("Capricorn Daddy - Nordic CEO",
-            "Personality: Disciplined, controlled, built himself from nothing. Softness exists, but only behind locked doors and earned trust. | North Star: Achievement and legacy | Secondary Trait: Emotional suppression | Non-Negotiable: Failure is not an option | Fatal Flaw: Sacrifices everything, including himself");
-
-        AddProfile("Aquarius Daddy - Tech Innovator",
-            "Personality: Thinks ahead of the world, lives outside convention. Detached at first... until he chooses to let you in. | North Star: Innovation and change | Secondary Trait: Emotional detachment | Non-Negotiable: Wont conform to expectations | Fatal Flaw: Disconnects from people in pursuit of ideas");
-
-        AddProfile("Pisces Daddy - Musician",
-            "Personality: Feels everything, expresses it without needing words. Being with him is like drifting through a dream you dont want to wake from. | North Star: Emotional expression | Secondary Trait: Escapism | Non-Negotiable: Protects his inner world | Fatal Flaw: Avoids reality until it crashes in");
-    }
-
-    private void AddProfile(string name, string description)
-    {
-        DaddyProfile profile = ScriptableObject.CreateInstance<DaddyProfile>();
-        profile.daddyName = name;
-        profile.description = description;
-        _profiles.Add(profile);
+        GameSetup.Daddies = daddies;
+        _daddyNames = new List<string>(daddies.Keys);
     }
 
     private void BuildUI()
@@ -75,7 +91,7 @@ public class DaddyMenuController : MonoBehaviour
         if (font == null)
             font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-        // Background canvas (behind everything)
+        // Background canvas
         GameObject bgCanvasObj = new GameObject("BackgroundCanvas", typeof(RectTransform));
         bgCanvasObj.layer = UiLayer;
 
@@ -89,7 +105,6 @@ public class DaddyMenuController : MonoBehaviour
         bgScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
         bgScaler.matchWidthOrHeight = 0.5f;
 
-        // Background image
         GameObject bgObj = new GameObject("Background", typeof(RectTransform));
         bgObj.layer = UiLayer;
         bgObj.transform.SetParent(bgCanvasObj.transform, false);
@@ -126,9 +141,11 @@ public class DaddyMenuController : MonoBehaviour
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
         scaler.matchWidthOrHeight = 0.5f;
 
+        canvas.pixelPerfect = true;
+
         canvasObject.AddComponent<GraphicRaycaster>();
 
-        // Game title image (placeholder — expects game_title.png in Art/UI/)
+        // Game title image
         Sprite titleSprite = LoadSprite("game_title");
         if (titleSprite != null)
         {
@@ -165,19 +182,15 @@ public class DaddyMenuController : MonoBehaviour
         dropdownRect.anchorMin = new Vector2(0.5f, 0.5f);
         dropdownRect.anchorMax = new Vector2(0.5f, 0.5f);
         dropdownRect.pivot = new Vector2(0.5f, 0.5f);
-        dropdownRect.anchoredPosition = new Vector2(0f, 10f);
-        dropdownRect.sizeDelta = new Vector2(600f, 60f);
-
-        List<string> names = new List<string>();
-        foreach (DaddyProfile p in _profiles)
-            names.Add(p.daddyName);
+        dropdownRect.anchoredPosition = new Vector2(0f, -20f);
+        dropdownRect.sizeDelta = new Vector2(800f, 70f);
 
         dropdown.ClearOptions();
-        dropdown.AddOptions(names);
+        dropdown.AddOptions(_daddyNames);
         dropdown.onValueChanged.AddListener(index =>
         {
-            if (index >= 0 && index < _profiles.Count)
-                GameSetup.Daddy = _profiles[index];
+            if (index >= 0 && index < _daddyNames.Count)
+                GameSetup.ChosenDaddyName = _daddyNames[index];
         });
 
         // Start button with image
@@ -212,10 +225,9 @@ public class DaddyMenuController : MonoBehaviour
         startRect.anchorMin = new Vector2(0.5f, 0.5f);
         startRect.anchorMax = new Vector2(0.5f, 0.5f);
         startRect.pivot = new Vector2(0.5f, 0.5f);
-        startRect.anchoredPosition = new Vector2(0f, -180f);
-        startRect.sizeDelta = new Vector2(1440f, 360f);
+        startRect.anchoredPosition = new Vector2(0f, -280f);
+        startRect.sizeDelta = new Vector2(720f, 180f);
 
-        // Only add text label if no sprite (fallback)
         if (startSprite == null)
         {
             Text btnText = CreateText("Text", startObj.transform, font, 38, Color.white, TextAnchor.MiddleCenter);
@@ -232,7 +244,6 @@ public class DaddyMenuController : MonoBehaviour
 
     private Dropdown CreateDropdown(Transform parent, Font font)
     {
-        // Root
         GameObject root = new GameObject("Dropdown", typeof(RectTransform));
         root.layer = UiLayer;
         root.transform.SetParent(parent, false);
@@ -242,16 +253,14 @@ public class DaddyMenuController : MonoBehaviour
 
         Dropdown dropdown = root.AddComponent<Dropdown>();
 
-        // Caption
         Text captionText = CreateText("CaptionText", root.transform, font, 32, Color.white, TextAnchor.MiddleLeft);
         RectTransform captionRect = (RectTransform)captionText.transform;
         captionRect.anchorMin = Vector2.zero;
         captionRect.anchorMax = Vector2.one;
-        captionRect.offsetMin = new Vector2(16f, 0f);
-        captionRect.offsetMax = new Vector2(-16f, 0f);
+        captionRect.offsetMin = new Vector2(20f, 4f);
+        captionRect.offsetMax = new Vector2(-20f, -4f);
         captionText.raycastTarget = true;
 
-        // Template
         GameObject templateObj = new GameObject("Template", typeof(RectTransform));
         templateObj.layer = UiLayer;
         templateObj.transform.SetParent(root.transform, false);
@@ -270,7 +279,6 @@ public class DaddyMenuController : MonoBehaviour
         templateRect.anchoredPosition = Vector2.zero;
         templateRect.sizeDelta = new Vector2(0f, 400f);
 
-        // Viewport
         GameObject viewportObj = new GameObject("Viewport", typeof(RectTransform));
         viewportObj.layer = UiLayer;
         viewportObj.transform.SetParent(templateObj.transform, false);
@@ -287,7 +295,6 @@ public class DaddyMenuController : MonoBehaviour
         viewportRect.offsetMin = new Vector2(0f, 6f);
         viewportRect.offsetMax = new Vector2(0f, -6f);
 
-        // Content — sized to fit items exactly, no extra padding
         GameObject contentObj = new GameObject("Content", typeof(RectTransform));
         contentObj.layer = UiLayer;
         contentObj.transform.SetParent(viewportObj.transform, false);
@@ -302,7 +309,6 @@ public class DaddyMenuController : MonoBehaviour
         scrollRect.viewport = viewportRect;
         scrollRect.content = contentRect;
 
-        // Item
         GameObject itemObj = new GameObject("Item", typeof(RectTransform));
         itemObj.layer = UiLayer;
         itemObj.transform.SetParent(contentObj.transform, false);
@@ -325,15 +331,14 @@ public class DaddyMenuController : MonoBehaviour
         RectTransform itemLabelRect = (RectTransform)itemLabel.transform;
         itemLabelRect.anchorMin = Vector2.zero;
         itemLabelRect.anchorMax = Vector2.one;
-        itemLabelRect.offsetMin = new Vector2(16f, 0f);
-        itemLabelRect.offsetMax = Vector2.zero;
+        itemLabelRect.offsetMin = new Vector2(20f, 2f);
+        itemLabelRect.offsetMax = new Vector2(-10f, -2f);
 
         RectTransform itemRect = (RectTransform)itemObj.transform;
         itemRect.anchorMin = new Vector2(0f, 0.5f);
         itemRect.anchorMax = new Vector2(1f, 0.5f);
         itemRect.sizeDelta = new Vector2(0f, 50f);
 
-        // Wire up
         dropdown.captionText = captionText;
         dropdown.itemText = itemLabel;
         dropdown.template = templateRect;
@@ -345,13 +350,7 @@ public class DaddyMenuController : MonoBehaviour
 
     private static Sprite LoadSprite(string name)
     {
-        // Unity loads sprites from Resources folders. Since our images are in
-        // Assets/Game/Art/UI/, we load via Resources.Load if a Resources folder
-        // exists, otherwise fall back to streaming. For simplicity, we place a
-        // "Resources" folder symlink or move assets there at build time.
-        // For now: try loading from a Resources/UI/ path.
-        Sprite sprite = Resources.Load<Sprite>("UI/" + name);
-        return sprite;
+        return Resources.Load<Sprite>("UI/" + name);
     }
 
     private Text CreateText(string objectName, Transform parent, Font font, int fontSize, Color color, TextAnchor alignment)
