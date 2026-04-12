@@ -38,15 +38,16 @@ namespace Game.Scripts
                 return;
             }
 
+            roomInteractionController.SetInteractionEnabled(false);
+
             data.Description = gameManager.RevealClue(objectId);
-           // blurController?.EnableBlur();
             inspectionScreen.Show(data);
         }
 
         private void CloseInspection()
         {
             inspectionScreen.Hide();
-           // blurController?.DisableBlur();
+            roomInteractionController.SetInteractionEnabled(true);
         }
     }
 }
