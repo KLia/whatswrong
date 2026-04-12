@@ -23,16 +23,16 @@ public class DaddyDiamond : MonoBehaviour
             UnityEngine.Debug.LogError("Something went wrong with the Diamond");
         }
 
-        PrintReplies("Test", "He is sad about his parents disowning him", "His business empire is crumbling and he's in debt");
+        PrintReplies("Test", "He is sad about his parents disowning him", "His business empire is crumbling and he's in debt", "1/3");
     }
 
-    private async void PrintReplies(string daddy, string guess, string reason)
+    private async void PrintReplies(string daddy, string guess, string reason, string clues_revealed)
     {
         var replies = new Dictionary<string, string>();
 
         try
         {
-            replies = await InvokeReplyAsync(daddy, guess, reason);
+            replies = await InvokeReplyAsync(daddy, guess, reason, clues_revealed);
         }
         catch (Exception e)
         {
@@ -45,12 +45,12 @@ public class DaddyDiamond : MonoBehaviour
         }
     }
 
-    public async Task<Dictionary<string, string>> InvokeReplyAsync(string daddy, string guess, string reason)
+    public async Task<Dictionary<string, string>> InvokeReplyAsync(string daddy, string guess, string reason, string clues_revealed )
     {
-        return await Task.Run(() => InvokeReply(daddy, guess, reason));
+        return await Task.Run(() => InvokeReply(daddy, guess, reason, clues_revealed));
     }
 
-    public Dictionary<string, string> InvokeReply(string daddy, string guess, string reason)
+    public Dictionary<string, string> InvokeReply(string daddy, string guess, string reason, string clues_revealed)
     {
         if (_textModule == null)
         {
@@ -63,6 +63,7 @@ public class DaddyDiamond : MonoBehaviour
         textModuleInput.Set(DiamondConstants.INPUT_KEY_DADDY, daddy);
         textModuleInput.Set(DiamondConstants.INPUT_KEY_GUESS, guess);
         textModuleInput.Set(DiamondConstants.INPUT_KEY_REASON, reason);
+        textModuleInput.Set(DiamondConstants.INPUT_KEY_CLUES_REVEALED, clues_revealed);
 
         // To get more fine-grained control over how the Diamond should invoke
         // the inputs, we also have the following TextModuleInvokeParameters class.

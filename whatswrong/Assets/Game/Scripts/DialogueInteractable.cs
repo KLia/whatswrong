@@ -113,7 +113,8 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
         //TODO: get the reason and daddy from the static class
         var reply =  diamond.InvokeReply("Aries daddy", 
             lastSubmittedText,
-            "His new colleague is annoying and daddy thinks he's an idiot");
+            "His new colleague is annoying and daddy thinks he's an idiot", 
+            "1/3");
         onUserResponseSubmitted?.Invoke(reply[DiamondConstants.OUTPUT_REPLY]);
     }
 
