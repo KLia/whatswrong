@@ -1,0 +1,104 @@
+name: Build Unity and deploy to itch.io
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - targetPlatform: WebGL
+            itchChannel: web
+          - targetPlatform: StandaloneWindows64
+            itchChannel: windows
+          - targetPlatform: StandaloneLinux64
+            itchChannel: linux
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Validate workflow configuration
+        shell: bash
+        env:
+          ITCH_USERNAME: ${{ secrets.ITCH_USERNAME }}
+          ITCH_GAME: ${{ secrets.ITCH_GAME }}
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          missing=()
+
+          for name in UNITY_LICENSE UNITY_EMAIL UNITY_PASSWORD ITCH_USERNAME ITCH_GAME BUTLER_API_KEY; do
+            if [ -z "${!name}" ]; then
+              missing+=("$name")
+            fi
+          done
+
+          if [ "${#missing[@]}" -gt 0 ]; then
+            printf '::error::Missing required GitHub Actions secrets: %s\n' "$(IFS=', '; echo "${missing[*]}")"
+            exit 1
+          fi
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: whatswrong/Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('whatswrong/Assets/**', 'whatswrong/Packages/**', 'whatswrong/ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}-
+            Library-
+
+      - name: Generate version
+        id: version
+        run: |
+          VERSION="$(date +'%Y.%m.%d')-${GITHUB_SHA::7}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: Build Unity project
+        id: build
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: whatswrong
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: whatswrong
+          versioning: Custom
+          version: ${{ steps.version.outputs.version }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 7
+
+      - name: Setup butler
+        if: success()
+        uses: remarkablegames/setup-butler@v1
+
+      - name: Push build to itch.io
+        if: success()
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          butler push build/${{ matrix.targetPlatform }} ${{ secrets.ITCH_USERNAME }}/${{ secrets.ITCH_GAME }}:${{ matrix.itchChannel }} --userversion ${{ steps.version.outputs.version }}
+
+      - name: Log build failure
+        if: failure()
+        run: |
+          echo "::error::Build failed for platform ${{ matrix.targetPlatform }}"
+          echo "::error::Check the logs above for details"
+          echo "Version attempted: ${{ steps.version.outputs.version }}"
