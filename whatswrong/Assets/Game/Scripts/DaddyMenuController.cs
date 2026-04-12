@@ -163,7 +163,7 @@ public class DaddyMenuController : MonoBehaviour
             titleRect.anchorMax = new Vector2(0.5f, 1f);
             titleRect.pivot = new Vector2(0.5f, 1f);
             titleRect.anchoredPosition = new Vector2(0f, -20f);
-            titleRect.sizeDelta = new Vector2(1400f, 400f);
+            titleRect.sizeDelta = new Vector2(2100f, 600f);
         }
 
         // Dropdown label
@@ -226,7 +226,7 @@ public class DaddyMenuController : MonoBehaviour
         startRect.anchorMax = new Vector2(0.5f, 0.5f);
         startRect.pivot = new Vector2(0.5f, 0.5f);
         startRect.anchoredPosition = new Vector2(0f, -280f);
-        startRect.sizeDelta = new Vector2(720f, 180f);
+        startRect.sizeDelta = new Vector2(1080f, 270f);
 
         if (startSprite == null)
         {
