@@ -16,6 +16,9 @@ namespace Game.Scripts
         public event Action MoveRightStarted;
         public event Action MoveRightStopped;
 
+        public event Action Inspect;
+        public event Action Outspect;
+
         private bool _leftWasPressed;
         private bool _rightWasPressed;
 
@@ -28,7 +31,7 @@ namespace Game.Scripts
         {
             NextRoom?.Invoke();
         }
-        
+
         private void RightArrowReleased()
         {
             MoveRightStopped?.Invoke();
@@ -49,6 +52,16 @@ namespace Game.Scripts
             MoveLeftStarted?.Invoke();
         }
 
+        private void OnObjectClicked()
+        {
+            Inspect?.Invoke();
+        }
+
+        private void OnAnywhereClicked()
+        {
+            Outspect?.Invoke();
+        }
+
         private void Start()
         {
             if (navigationControls == null)
@@ -61,26 +74,40 @@ namespace Game.Scripts
         private void Update()
         {
             Keyboard keyboard = Keyboard.current;
-            if (keyboard == null)
-                return;
+            if (keyboard != null)
+            {
+                bool leftPressed = keyboard.leftArrowKey.isPressed;
+                bool rightPressed = keyboard.rightArrowKey.isPressed;
 
-            bool leftPressed = keyboard.leftArrowKey.isPressed;
-            bool rightPressed = keyboard.rightArrowKey.isPressed;
+                if (leftPressed && !_leftWasPressed)
+                    LeftArrowPressed();
 
-            if (leftPressed && !_leftWasPressed)
-                LeftArrowPressed();
+                if (!leftPressed && _leftWasPressed)
+                    LeftArrowReleased();
 
-            if (!leftPressed && _leftWasPressed)
-                LeftArrowReleased();
+                if (rightPressed && !_rightWasPressed)
+                    RightArrowPressed();
 
-            if (rightPressed && !_rightWasPressed)
-                RightArrowPressed();
+                if (!rightPressed && _rightWasPressed)
+                    RightArrowReleased();
 
-            if (!rightPressed && _rightWasPressed)
-                RightArrowReleased();
+                _leftWasPressed = leftPressed;
+                _rightWasPressed = rightPressed;
+                if (keyboard.escapeKey.wasPressedThisFrame)
+                {
+                    OnAnywhereClicked();
+                }
+            }
 
-            _leftWasPressed = leftPressed;
-            _rightWasPressed = rightPressed;
+
+            Mouse mouse = Mouse.current;
+            if (mouse != null)
+            {
+                if (mouse.leftButton.wasPressedThisFrame)
+                {
+                    OnObjectClicked();
+                }
+            }
         }
 
         private void OnDestroy()
@@ -91,6 +118,5 @@ namespace Game.Scripts
             navigationControls.NextButtonPressed -= OnRightClick;
             navigationControls.PreviousButtonPressed -= OnLeftClick;
         }
-
     }
 }
