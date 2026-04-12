@@ -46,9 +46,15 @@ namespace Game.Scripts
 
         public void Hide()
         {
+            if (!gameObject.activeInHierarchy || !root.activeInHierarchy)
+            {
+                ApplyHiddenState();
+                return;
+            }
+
             if (!image.enabled)
             {
-                root.SetActive(false);
+                ApplyHiddenState();
                 return;
             }
 
@@ -77,6 +83,7 @@ namespace Game.Scripts
 
             image.rectTransform.localScale = targetScale;
             contentCanvasGroup.alpha = 1f;
+            scaleRoutine = null;
         }
 
         private IEnumerator ScaleAndFadeOut()
@@ -98,7 +105,20 @@ namespace Game.Scripts
 
             image.rectTransform.localScale = targetScale;
             contentCanvasGroup.alpha = 0f;
+            scaleRoutine = null;
+            ApplyHiddenState();
+        }
 
+        private void ApplyHiddenState()
+        {
+            if (scaleRoutine != null)
+            {
+                StopCoroutine(scaleRoutine);
+                scaleRoutine = null;
+            }
+
+            contentCanvasGroup.alpha = 0f;
+            image.rectTransform.localScale = startScale;
             image.enabled = false;
             root.SetActive(false);
         }
