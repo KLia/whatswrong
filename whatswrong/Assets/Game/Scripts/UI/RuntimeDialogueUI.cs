@@ -267,6 +267,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         _currentSource = source;
+        _currentSource.onUserResponseSubmitted.AddListener(OnDiamondReply);
         _currentLineIndex = -1;
         _ignoreAdvanceFrame = Time.frameCount;
         _responseSubmittedForCurrentLine = false;
@@ -446,21 +447,29 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         _currentSource.RegisterSubmittedResponse(submittedText);
         _responseSubmittedForCurrentLine = true;
+    }
 
-        if (_currentLineIndex < _activeLines.Count - 1)
+    private void OnDiamondReply(string replyText)
+    {
+        if (string.IsNullOrWhiteSpace(replyText))
         {
-            _responseRoot.SetActive(false);
-            _dialogueText.gameObject.SetActive(true);
-            SetContinueBoxVisible(false);
-            _ignoreAdvanceFrame = Time.frameCount;
-            ShowNextLine();
             return;
         }
 
-        _responseInputField.DeactivateInputField();
-        _phase = DialoguePhase.WaitingForAdvance;
+        var replyLine = new DialogueInteractable.DialogueLine
+        {
+            speakerColor = DialogueInteractable.SpeakerColor.Blue,
+            requestManualResponseAfterLine = false,
+            text = replyText
+        };
+
+        _activeLines.Add(replyLine);
+
+        _responseRoot.SetActive(false);
+        _dialogueText.gameObject.SetActive(true);
+        SetContinueBoxVisible(false);
         _ignoreAdvanceFrame = Time.frameCount;
-        SetContinueBoxVisible(true);
+        ShowNextLine();
     }
 
     private void HideDialogue()
@@ -469,6 +478,10 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         _phase = DialoguePhase.Hidden;
         _currentLineIndex = -1;
+        if (_currentSource != null)
+        {
+            _currentSource.onUserResponseSubmitted.RemoveListener(OnDiamondReply);
+        }
         _currentSource = null;
         _activeLines.Clear();
         _responseSubmittedForCurrentLine = false;
