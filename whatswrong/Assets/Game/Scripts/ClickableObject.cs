@@ -46,7 +46,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        CameraZoomController zoomController = zoomCamera.GetComponent<CameraZoomController>();
+        InspectionTransition zoomController = zoomCamera.GetComponent<InspectionTransition>();
 
         if (zoomController != null)
         {
@@ -96,18 +96,18 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler
                 continue;
             }
 
-            if (sceneCamera.TryGetComponent<CameraZoomController>(out _))
+            if (sceneCamera.TryGetComponent<InspectionTransition>(out _))
             {
                 return sceneCamera;
             }
         }
 
-        if (Camera.main != null && Camera.main.TryGetComponent<CameraZoomController>(out _))
+        if (Camera.main != null && Camera.main.TryGetComponent<InspectionTransition>(out _))
         {
             return Camera.main;
         }
 
-        CameraZoomController fallbackController = FindAnyObjectByType<CameraZoomController>();
+        InspectionTransition fallbackController = FindAnyObjectByType<InspectionTransition>();
         return fallbackController != null ? fallbackController.GetComponent<Camera>() : null;
     }
 
