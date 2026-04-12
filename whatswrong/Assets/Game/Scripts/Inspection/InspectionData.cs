@@ -7,7 +7,6 @@ namespace Game.Scripts
     {
         public string id;
         public Sprite image;
-        public string Description { get; set; }
     }
 }
 

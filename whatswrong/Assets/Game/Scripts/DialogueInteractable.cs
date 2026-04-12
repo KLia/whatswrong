@@ -67,7 +67,7 @@ namespace Game.Scripts
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            TryOpenDialogue();
+            TryOpenDialogue();  
         }
 
         private void OnMouseDown()

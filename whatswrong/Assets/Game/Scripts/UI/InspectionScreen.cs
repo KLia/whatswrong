@@ -1,28 +1,28 @@
-﻿using System.Collections;
-using TMPro;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.Scripts
 {
-    public class InspectionScreen : MonoBehaviour
+    public class InspectionScreen : MonoBehaviour, IPointerClickHandler
     {
+        public event Action InspectionScreenClicked;
+        
         [SerializeField] private CanvasGroup contentCanvasGroup;
         [SerializeField] private GameObject root;
-        [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private Image image;
 
         [Header("Scale Settings")]
         [SerializeField] private Vector3 startScale = new Vector3(0.5f, 0.5f, 0.5f);
         [SerializeField] private float scaleDuration = 0.25f;
 
-        private Coroutine scaleRoutine;
+        private Coroutine _scaleRoutine;
 
         public void Show(InspectionData data)
         {
             root.SetActive(true);
-
-            descriptionText.text = data.Description;
 
             if (data.image != null)
             {
@@ -35,13 +35,13 @@ namespace Game.Scripts
                 image.enabled = false;
             }
 
-            if (scaleRoutine != null)
-                StopCoroutine(scaleRoutine);
+            if (_scaleRoutine != null)
+                StopCoroutine(_scaleRoutine);
 
             image.rectTransform.localScale = startScale;
             contentCanvasGroup.alpha = 0f;
 
-            scaleRoutine = StartCoroutine(ScaleAndFadeIn());
+            _scaleRoutine = StartCoroutine(ScaleAndFadeIn());
         }
 
         public void Hide()
@@ -58,10 +58,10 @@ namespace Game.Scripts
                 return;
             }
 
-            if (scaleRoutine != null)
-                StopCoroutine(scaleRoutine);
+            if (_scaleRoutine != null)
+                StopCoroutine(_scaleRoutine);
 
-            scaleRoutine = StartCoroutine(ScaleAndFadeOut());
+            _scaleRoutine = StartCoroutine(ScaleAndFadeOut());
         }
 
         private IEnumerator ScaleAndFadeIn()
@@ -83,7 +83,7 @@ namespace Game.Scripts
 
             image.rectTransform.localScale = targetScale;
             contentCanvasGroup.alpha = 1f;
-            scaleRoutine = null;
+            _scaleRoutine = null;
         }
 
         private IEnumerator ScaleAndFadeOut()
@@ -105,22 +105,27 @@ namespace Game.Scripts
 
             image.rectTransform.localScale = targetScale;
             contentCanvasGroup.alpha = 0f;
-            scaleRoutine = null;
+            _scaleRoutine = null;
             ApplyHiddenState();
         }
 
         private void ApplyHiddenState()
         {
-            if (scaleRoutine != null)
+            if (_scaleRoutine != null)
             {
-                StopCoroutine(scaleRoutine);
-                scaleRoutine = null;
+                StopCoroutine(_scaleRoutine);
+                _scaleRoutine = null;
             }
 
             contentCanvasGroup.alpha = 0f;
             image.rectTransform.localScale = startScale;
             image.enabled = false;
             root.SetActive(false);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            InspectionScreenClicked?.Invoke();
         }
     }
 }

@@ -349,7 +349,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         DialogueInteractable.DialogueLine line = _activeLines[_currentLineIndex];
-        _dialogueText.color = SpeakerColorMappings.GetColor(line.speakerColor);
+        _dialogueText.color = SpeakerColorMapping.GetColor(line.speakerColor);
 
         _responseRoot.SetActive(false);
         _dialogueText.gameObject.SetActive(true);
@@ -534,7 +534,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
     private void ApplyResponseColors(SpeakerColor speakerColor)
     {
-        Color speakerColorValue = SpeakerColorMappings.GetColor(speakerColor);
+        Color speakerColorValue = SpeakerColorMapping.GetColor(speakerColor);
         Color placeholderColor = speakerColorValue;
         placeholderColor.a = 0.6f;
 

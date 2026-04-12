@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.Scripts
 {
@@ -11,13 +10,13 @@ namespace Game.Scripts
         Blue = 2
     }
     
-    public static class SpeakerColorMappings
+    public static class SpeakerColorMapping
     {
-        private static readonly SpeakerColorMapping[] Mappings = new SpeakerColorMapping[]
+        private static readonly Mapping[] Mappings = new Mapping[]
         {
-            new SpeakerColorMapping {color = SpeakerColor.Pink, colorValue = new Color(1f, 0.47f, 0.78f)},
-            new SpeakerColorMapping {color = SpeakerColor.Blue, colorValue = new Color(0.45f, 0.77f, 1f)} ,
-            new SpeakerColorMapping {color = SpeakerColor.Default, colorValue = Color.white}
+            new Mapping {color = SpeakerColor.Pink, colorValue = new Color(1f, 0.47f, 0.78f)},
+            new Mapping {color = SpeakerColor.Blue, colorValue = new Color(0.45f, 0.77f, 1f)} ,
+            new Mapping {color = SpeakerColor.Default, colorValue = Color.white}
         };
 
         public static Color GetColor(SpeakerColor color)
@@ -33,7 +32,7 @@ namespace Game.Scripts
     }
 
     [Serializable]
-    public class SpeakerColorMapping
+    public class Mapping
     {
         [SerializeField] public SpeakerColor color;
         [SerializeField] public Color colorValue;
