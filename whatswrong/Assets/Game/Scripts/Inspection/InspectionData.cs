@@ -6,9 +6,8 @@ namespace Game.Scripts
     public class InspectionData : ScriptableObject
     {
         public string id;
-        public string title;
-        [TextArea] public string description;
         public Sprite image;
+        public string Description { get; set; }
     }
 }
 

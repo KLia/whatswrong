@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using UnityEngine;
 
 namespace Game.Scripts
@@ -8,6 +9,7 @@ namespace Game.Scripts
         [SerializeField] private InspectionDatabase inspectionDatabase;
         [SerializeField] private InspectionScreen inspectionScreen;
         [SerializeField] private BackgroundBlurController blurController;
+        [SerializeField] private GameManager gameManager;
 
         private void OnEnable()
         {
@@ -36,6 +38,7 @@ namespace Game.Scripts
                 return;
             }
 
+            data.Description = gameManager.RevealClue(objectId);
            // blurController?.EnableBlur();
             inspectionScreen.Show(data);
         }

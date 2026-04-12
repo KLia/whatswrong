@@ -20,7 +20,7 @@ namespace Game.Scripts
         public void Show(InspectionData data)
         {
             root.SetActive(true);
-            descriptionText.text = data.description;
+            descriptionText.text = data.Description;
 
             if (data.image != null)
             {

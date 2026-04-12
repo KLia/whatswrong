@@ -697,6 +697,7 @@ MonoBehaviour:
   inspectionDatabase: {fileID: 1567178003}
   inspectionScreen: {fileID: 1241917234}
   blurController: {fileID: 0}
+  gameManager: {fileID: 193543322}
 --- !u!114 &804364897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,7 +727,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1567178004}
   - {fileID: 1893269061}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1284,7 +1284,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 804364898}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617111141
 GameObject:
@@ -1662,3 +1662,4 @@ SceneRoots:
   - {fileID: 1429911231}
   - {fileID: 93250264}
   - {fileID: 193543323}
+  - {fileID: 1567178004}
