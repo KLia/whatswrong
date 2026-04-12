@@ -20,6 +20,8 @@ namespace DefaultNamespace
         private bool Hint2Found = false;
         private bool Hint3Found = false;
 
+        public bool EndSceneTriggered = false;
+
         public Dictionary<string, Daddy> Daddies = new Dictionary<string, Daddy>();
 
         public void Start()
@@ -84,16 +86,25 @@ namespace DefaultNamespace
                 return Hint2;
             }
             else if (objectId == Object3)
-            { 
+            {
                 if (!Hint3Found)
                 {
                     Hint3Found = true;
                     CluesRevealed++;
                 }
+
                 return Hint3;
             }
 
             return "... *nothing* ...";
+        }
+
+        public void TriggerEndScene()
+        {
+            if (EndSceneTriggered)
+            {
+                //TODO trigger end scene
+            }
         }
     }
 }

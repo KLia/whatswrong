@@ -121,6 +121,9 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
             lastSubmittedText,
             gameManager.DaddyReason, 
             $"{gameManager.CluesRevealed}/3");
+        
+        gameManager.EndSceneTriggered = reply[DiamondConstants.OUTPUT_GAME_OVER] == "True" || 
+                                        reply[DiamondConstants.OUTPUT_GAME_OVER] =="Yes";
         onUserResponseSubmitted?.Invoke(reply[DiamondConstants.OUTPUT_REPLY]);
     }
 
