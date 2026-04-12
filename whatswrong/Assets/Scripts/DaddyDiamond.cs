@@ -100,6 +100,10 @@ public class DaddyDiamond : MonoBehaviour
         var reply = textResult.GetString(DiamondConstants.OUTPUT_REPLY);
         var game_over = textResult.GetString(DiamondConstants.OUTPUT_GAME_OVER);
 
+        if (game_over == null)
+        {
+            game_over = "False";
+        }
 
         // In this example I'm using a Dictionary to keep both key and values
         // together, but you can use the values however you want.
