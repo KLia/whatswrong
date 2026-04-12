@@ -57,7 +57,10 @@ namespace Game.Scripts
                 }
                 else
                 {
-                    yield return _sceneTransition.LoadScene(sceneName);
+                    yield return SceneManager.LoadSceneAsync(
+                        sceneName,
+                        LoadSceneMode.Additive
+                    );
                 }
             }
             
