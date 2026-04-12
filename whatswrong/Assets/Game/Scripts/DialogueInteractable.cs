@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -8,6 +9,7 @@ using UnityEngine.EventSystems;
 public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
 {
     public DaddyDiamond diamond;
+    public GameManager gameManager;
     
     public enum SpeakerColor
     {
@@ -107,14 +109,18 @@ public class DialogueInteractable : MonoBehaviour, IPointerClickHandler
     {
         lastSubmittedText = submittedText ?? string.Empty;
         
+        GameObject go = GameObject.Find("GameManager");
+        GameManager gameManager = go.GetComponent<GameManager>();
+        
         if (string.IsNullOrWhiteSpace(submittedText))
             return;
 
         //TODO: get the reason and daddy from the static class
-        var reply =  diamond.InvokeReply("Aries daddy", 
+        var reply =  diamond.InvokeReply(
+            gameManager.DaddyPersonality, 
             lastSubmittedText,
-            "His new colleague is annoying and daddy thinks he's an idiot", 
-            "1/3");
+            gameManager.DaddyReason, 
+            $"{gameManager.CluesRevealed}/3");
         onUserResponseSubmitted?.Invoke(reply[DiamondConstants.OUTPUT_REPLY]);
     }
 

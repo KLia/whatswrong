@@ -61,8 +61,8 @@ public class DaddyDiamond : MonoBehaviour
         using var textModuleInput = _textModule.CreateInput();
 
         textModuleInput.Set(DiamondConstants.INPUT_KEY_DADDY, daddy);
-        textModuleInput.Set(DiamondConstants.INPUT_KEY_GUESS, guess);
         textModuleInput.Set(DiamondConstants.INPUT_KEY_REASON, reason);
+        textModuleInput.Set(DiamondConstants.INPUT_KEY_GUESS, guess);
         textModuleInput.Set(DiamondConstants.INPUT_KEY_CLUES_REVEALED, clues_revealed);
 
         // To get more fine-grained control over how the Diamond should invoke

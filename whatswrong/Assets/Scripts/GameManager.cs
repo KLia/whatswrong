@@ -16,6 +16,10 @@ namespace DefaultNamespace
         public string Object3;
         public int CluesRevealed = 0;
 
+        private bool Hint1Found = false;
+        private bool Hint2Found = false;
+        private bool Hint3Found = false;
+
         public Dictionary<string, Daddy> Daddies = new Dictionary<string, Daddy>();
 
         public void Start()
@@ -61,21 +65,35 @@ namespace DefaultNamespace
         {
             if (objectId == Object1)
             {
-                CluesRevealed++;
+                if (!Hint1Found)
+                {
+                    Hint1Found = true;
+                    CluesRevealed++;
+                }
+
                 return Hint1;
             }
             else if (objectId == Object2)
             {
-                CluesRevealed++;
+                if (!Hint2Found)
+                {
+                    Hint2Found = true;
+                    CluesRevealed++;
+                }
+
                 return Hint2;
             }
             else if (objectId == Object3)
-            {
-                CluesRevealed++;
+            { 
+                if (!Hint3Found)
+                {
+                    Hint3Found = true;
+                    CluesRevealed++;
+                }
                 return Hint3;
             }
 
-            return "...";
+            return "... *nothing* ...";
         }
     }
 }
