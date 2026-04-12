@@ -239,6 +239,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb8099970c145e2ad33b483ef09c170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefaultNamespace.GameManager
+  ChosenDaddy: Aries Daddy
+  DaddyReason: He wants to sleep but you won't let him
+  DaddyPersonality: He is lazy
+  Hint1: test 1 clue
+  Object1: bathroom_mirror
+  Hint2: 'test 2 '
+  Object2: postit
+  Hint3: test 3 clue
+  Object3: something
+  CluesRevealed: 0
 --- !u!4 &193543323
 Transform:
   m_ObjectHideFlags: 0
