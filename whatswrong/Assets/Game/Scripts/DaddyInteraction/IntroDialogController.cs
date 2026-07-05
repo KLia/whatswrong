@@ -2,7 +2,7 @@
 
 namespace Game.Scripts.DaddyInteraction
 {
-    public class StartDialogController : MonoBehaviour
+    public class IntroDialogController : MonoBehaviour
     {
         [SerializeField] private RoomInput roomInput;
         [SerializeField] private DialogLine[] dialogLines;
