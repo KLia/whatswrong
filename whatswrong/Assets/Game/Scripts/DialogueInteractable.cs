@@ -15,7 +15,7 @@ namespace Game.Scripts
         [Serializable]
         public class DialogueLine
         {
-            public SpeakerColor speakerColor = SpeakerColor.Pink;
+            public SpeakerColor speakerColor = SpeakerColor.Player;
             public bool requestManualResponseAfterLine = false;
 
             [TextArea(2, 6)]
@@ -30,7 +30,7 @@ namespace Game.Scripts
         [Header("Dialogue Content")]
         [SerializeField] private DialogueLine[] lines = Array.Empty<DialogueLine>();
         [SerializeField] private bool allowUserResponse = true;
-        [SerializeField] private SpeakerColor responseSpeakerColor = SpeakerColor.Pink;
+        [SerializeField] private SpeakerColor responseSpeakerColor = SpeakerColor.Player;
         [SerializeField] private string responsePrompt = "Type your reply:";
         [SerializeField] private string responsePlaceholder = "Type your answer and press Enter";
 
@@ -62,7 +62,7 @@ namespace Game.Scripts
             return allowUserResponse &&
                    line != null &&
                    line.requestManualResponseAfterLine &&
-                   line.speakerColor == SpeakerColor.Pink;
+                   line.speakerColor == SpeakerColor.Player;
         }
 
         public void OnPointerClick(PointerEventData eventData)

@@ -361,7 +361,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
     private void ShowResponseInput()
     {
-        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : SpeakerColor.Pink);
+        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : SpeakerColor.Player);
 
         _dialogueText.gameObject.SetActive(false);
         SetContinueBoxVisible(false);
@@ -459,7 +459,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         var replyLine = new DialogueInteractable.DialogueLine
         {
-            speakerColor = SpeakerColor.Blue,
+            speakerColor = SpeakerColor.Daddy,
             requestManualResponseAfterLine = false,
             text = replyText
         };

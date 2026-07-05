@@ -1676,10 +1676,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2049312389}
+  - component: {fileID: 2049312392}
   - component: {fileID: 2049312390}
   - component: {fileID: 2049312391}
   m_Layer: 0
-  m_Name: DialogControllers
+  m_Name: DaddyDialogue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1745,6 +1746,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Scripts.DaddyInteraction.DaddyDialogController
   roomInput: {fileID: 1324406556}
   dialogUI: {fileID: 1833574579}
+  gameManager: {fileID: 193543322}
+  diamond: {fileID: 2049312392}
+--- !u!114 &2049312392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049312388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ce64d63b5b15a042be5d0619652ddde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DaddyDiamond
+  _diamondName: SampleDiamond
 --- !u!1001 &8547770663285080670
 PrefabInstance:
   m_ObjectHideFlags: 0

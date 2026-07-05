@@ -6,16 +6,16 @@ namespace Game.Scripts
     public enum SpeakerColor
     {
         Default = 0,
-        Pink = 1,
-        Blue = 2
+        Player = 1,
+        Daddy = 2
     }
     
     public static class SpeakerColorMapping
     {
         private static readonly Mapping[] Mappings = new Mapping[]
         {
-            new Mapping {color = SpeakerColor.Pink, colorValue = new Color(1f, 0.47f, 0.78f)},
-            new Mapping {color = SpeakerColor.Blue, colorValue = new Color(0.45f, 0.77f, 1f)} ,
+            new Mapping {color = SpeakerColor.Player, colorValue = new Color(1f, 0.47f, 0.78f)},
+            new Mapping {color = SpeakerColor.Daddy, colorValue = new Color(0.45f, 0.77f, 1f)} ,
             new Mapping {color = SpeakerColor.Default, colorValue = Color.white}
         };
 

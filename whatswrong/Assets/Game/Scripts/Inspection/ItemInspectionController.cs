@@ -54,7 +54,7 @@ namespace Game.Scripts
             var description = gameManager.RevealClue(data.id);
             _inspecting = true;
             inspectionScreen.Show(data);
-            dialogUI.ShowLine(description, SpeakerColorMapping.GetColor(SpeakerColor.Pink));
+            dialogUI.ShowLine(description, SpeakerColorMapping.GetColor(SpeakerColor.Player));
         }
 
         private void CloseInspection()
