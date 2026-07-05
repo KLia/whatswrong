@@ -14,6 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  PROJECT_PATH: whatswrong
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -77,8 +78,8 @@ jobs:
       - name: Cache Unity Library
         uses: actions/cache@v4
         with:
-          path: whatswrong/Library
-          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('whatswrong/Assets/**', 'whatswrong/Packages/**', 'whatswrong/ProjectSettings/**') }}
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
           restore-keys: |
             Library-${{ matrix.targetPlatform }}-
             Library-
@@ -94,9 +95,9 @@ jobs:
         id: build
         uses: game-ci/unity-builder@v4
         with:
-          projectPath: whatswrong
+          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          buildName: whatswrong
+          buildName: ${{ env.PROJECT_PATH }}
           versioning: Custom
           version: ${{ steps.version.outputs.version }}
 
