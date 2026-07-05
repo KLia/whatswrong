@@ -1,7 +1,6 @@
 using System;
 using Game.Scripts.DaddyInteraction;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Game.Scripts
 {
@@ -42,14 +41,13 @@ namespace Game.Scripts
                 return;
             }
             
-            Mouse mouse = Mouse.current;
-            if (mouse == null)
+            if (!PointerInput.TryGetPosition(out var pointerPosition))
                 return;
 
-            var collider = GetCollider(mouse.position.ReadValue());
+            var collider = GetCollider(pointerPosition);
             SetCursor(collider != null);
 
-            if (mouse.leftButton.wasPressedThisFrame)
+            if (PointerInput.WasPressedThisFrame())
             {
                 if (collider == null)
                 {

@@ -93,7 +93,7 @@ public class InspectionTransition : MonoBehaviour, ISceneUnlaodHandler
         }
 
         // Click sul vuoto per resettare - usa LateUpdate per dare priorità a OnMouseDown
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && isZoomed)
+        if (PointerInput.WasPressedThisFrame() && isZoomed)
         {
             StartCoroutine(CheckClickOnEmpty());
         }
@@ -107,7 +107,12 @@ public class InspectionTransition : MonoBehaviour, ISceneUnlaodHandler
         if (!isZoomed) yield break; // Se non siamo più zoomati, esci
 
         // Controlla se abbiamo cliccato su un oggetto vuoto
-        Ray ray = controlledCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (!PointerInput.TryGetPosition(out var pointerPosition))
+        {
+            yield break;
+        }
+
+        Ray ray = controlledCamera.ScreenPointToRay(pointerPosition);
         RaycastHit hit;
 
         // Se NON colpiamo nessun oggetto con ClickableObject, resettiamo

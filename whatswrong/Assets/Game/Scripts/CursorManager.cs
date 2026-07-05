@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using Game.Scripts;
 
 public class CursorManager : MonoBehaviour
 {
@@ -41,7 +41,7 @@ public class CursorManager : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying || Mouse.current == null)
+        if (!Application.isPlaying || !PointerInput.TryGetPosition(out var mouseScreen))
             return;
 
         if (_camera == null)
@@ -49,8 +49,6 @@ public class CursorManager : MonoBehaviour
 
         if (_camera == null)
             return;
-
-        Vector2 mouseScreen = Mouse.current.position.ReadValue();
 
         Vector3 world = _camera.ScreenToWorldPoint(mouseScreen);
         world.z = 0f;
