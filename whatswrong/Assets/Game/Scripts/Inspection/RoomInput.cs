@@ -11,19 +11,17 @@ namespace Game.Scripts
         [SerializeField] private LayerMask inspectableLayerMask;
         [SerializeField] private LayerMask daddyLayerMask;
 
-        [SerializeField] private Texture2D defaultCursor;
-        [SerializeField] private Texture2D hoverCursor;
-        [SerializeField] private Vector2 hotspot = Vector2.zero;
-
         public event Action<InspectionData> InspectRequested;
         public event Action DaddyConversationRequested;
 
+        private CursorManager _cursorManager;
         private bool _roomInputEnabled;
         private bool _isHovering;
 
         private void Awake()
         {
-            Cursor.SetCursor(defaultCursor, hotspot, CursorMode.Auto);
+            _cursorManager = FindAnyObjectByType<CursorManager>();
+            _cursorManager.SetDefaultCursor();
         }
 
         public void SetInteractionEnabled(bool enabled)
@@ -88,10 +86,11 @@ namespace Game.Scripts
 
             _isHovering = hovering;
 
-            Cursor.SetCursor(
-                hovering ? hoverCursor : defaultCursor,
-                hotspot,
-                CursorMode.Auto);
+            if (_isHovering)
+                _cursorManager.SetHoverCursor();
+            else
+                _cursorManager.SetDefaultCursor();
+
         }
 
         private void OnDisable()

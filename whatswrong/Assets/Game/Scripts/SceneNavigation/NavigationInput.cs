@@ -21,6 +21,8 @@ namespace Game.Scripts
         public event Action DragEnded;
 
 
+        private CursorManager _cursorManager;
+        
         private bool _leftWasPressed;
         private bool _rightWasPressed;
         private bool _isDragging;
@@ -59,6 +61,7 @@ namespace Game.Scripts
 
         private void OnDragStarted()
         {
+            _cursorManager.SetDragCursor();
             DragStarted?.Invoke();
         }
 
@@ -69,7 +72,13 @@ namespace Game.Scripts
 
         private void OnDragEnded()
         {
+            _cursorManager.SetDefaultCursor();
             DragEnded?.Invoke();
+        }
+
+        private void Awake()
+        {
+            _cursorManager = FindObjectOfType<CursorManager>();
         }
 
         private void Start()
