@@ -26,6 +26,12 @@ namespace Game.Scripts
 
         public void ContinueButtonClickHandler() //Called from within unity dialogUI prefab continue button
         {
+            if (inputText.gameObject.activeSelf && !string.IsNullOrWhiteSpace(inputText.text))
+            {
+                HandleSubmit(inputText.text);
+                return;
+            }
+
             ContinueButtonClicked?.Invoke();
         }
 

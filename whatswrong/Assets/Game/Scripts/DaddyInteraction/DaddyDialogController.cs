@@ -10,7 +10,7 @@ namespace Game.Scripts.DaddyInteraction
         [SerializeField] private GameManager gameManager;
         [SerializeField] private DaddyDiamond diamond;
 
-        private bool _userIsWriting;
+        private bool _isUIOpen;
 
         private void OnEnable()
         {
@@ -19,6 +19,7 @@ namespace Game.Scripts.DaddyInteraction
 
             roomInput.DaddyConversationRequested += HandleDaddyConversationRequested;
             dialogUI.ResponseSubmitted += HandleResponseSubmitted;
+            dialogUI.ContinueButtonClicked += HandleContinueClicked;
         }
 
         private void OnDisable()
@@ -28,27 +29,27 @@ namespace Game.Scripts.DaddyInteraction
 
             roomInput.DaddyConversationRequested -= HandleDaddyConversationRequested;
             dialogUI.ResponseSubmitted -= HandleResponseSubmitted;
+            dialogUI.ContinueButtonClicked -= HandleContinueClicked;
         }
 
         private void HandleDaddyConversationRequested()
         {
-            if (_userIsWriting)
+            if (_isUIOpen)
                 return;
 
-            _userIsWriting = true;
+            _isUIOpen = true;
             roomInput.SetInteractionEnabled(false);
             dialogUI.ShowTextInput();
         }
 
         private void HandleResponseSubmitted(string submittedText)
         {
-            if (!_userIsWriting)
+            if (!_isUIOpen)
                 return;
 
             if (string.IsNullOrWhiteSpace(submittedText))
                 return;
 
-            _userIsWriting = false;
             RespondToDaddy(submittedText);
         }
 
@@ -56,7 +57,7 @@ namespace Game.Scripts.DaddyInteraction
         {
             if (gameManager.CluesRevealed == 0)
             {
-                ShowReplyAndWaitForContinue("... *nothing* ...");
+                dialogUI.ShowLine("... *nothing* ...", SpeakerColorMapping.GetColor(SpeakerColor.Daddy));
                 return;
             }
 
@@ -68,23 +69,23 @@ namespace Game.Scripts.DaddyInteraction
                 gameManager.DaddyReason,
                 $"{gameManager.CluesRevealed}/3");
 
+            if (!_isUIOpen)
+                return; // player already closed the conversation while the backend was thinking
+
             gameManager.EndSceneTriggered =
                 reply[DiamondConstants.OUTPUT_GAME_OVER] == "True" ||
                 reply[DiamondConstants.OUTPUT_GAME_OVER] == "Yes" ||
                 reply[DiamondConstants.OUTPUT_GAME_OVER] == "yes";
 
-            ShowReplyAndWaitForContinue(reply[DiamondConstants.OUTPUT_REPLY]);
+            dialogUI.ShowLine(reply[DiamondConstants.OUTPUT_REPLY], SpeakerColorMapping.GetColor(SpeakerColor.Daddy));
         }
 
-        private void ShowReplyAndWaitForContinue(string replyText)
+        private void HandleContinueClicked()
         {
-            dialogUI.ShowLine(replyText, SpeakerColorMapping.GetColor(SpeakerColor.Daddy));
-            dialogUI.ContinueButtonClicked += HandleReplyAcknowledged;
-        }
+            if (!_isUIOpen)
+                return;
 
-        private void HandleReplyAcknowledged()
-        {
-            dialogUI.ContinueButtonClicked -= HandleReplyAcknowledged;
+            _isUIOpen = false;
             dialogUI.Hide();
             roomInput.SetInteractionEnabled(true);
         }
