@@ -6,7 +6,7 @@ namespace Game.Scripts
 {
     public class DialogUI : MonoBehaviour
     {
-        public event Action ContinueButtonnClicked;
+        public event Action ContinueButtonClicked;
         public event Action<string> ResponseSubmitted;
 
         [SerializeField] private CanvasGroup contentCanvasGroup;
@@ -26,7 +26,7 @@ namespace Game.Scripts
 
         public void ContinueButtonClickHandler() //Called from within unity dialogUI prefab continue button
         {
-            ContinueButtonnClicked?.Invoke();
+            ContinueButtonClicked?.Invoke();
         }
 
         public void ShowLine(string text, Color color = default)

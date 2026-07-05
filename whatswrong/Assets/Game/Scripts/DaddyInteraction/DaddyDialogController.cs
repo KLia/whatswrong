@@ -10,7 +10,7 @@ namespace Game.Scripts.DaddyInteraction
         [SerializeField] private GameManager gameManager;
         [SerializeField] private DaddyDiamond diamond;
 
-        private bool _conversationOpen;
+        private bool _userIsWriting;
 
         private void OnEnable()
         {
@@ -32,23 +32,23 @@ namespace Game.Scripts.DaddyInteraction
 
         private void HandleDaddyConversationRequested()
         {
-            if (_conversationOpen)
+            if (_userIsWriting)
                 return;
 
-            _conversationOpen = true;
+            _userIsWriting = true;
             roomInput.SetInteractionEnabled(false);
             dialogUI.ShowTextInput();
         }
 
         private void HandleResponseSubmitted(string submittedText)
         {
-            if (!_conversationOpen)
+            if (!_userIsWriting)
                 return;
 
             if (string.IsNullOrWhiteSpace(submittedText))
                 return;
 
-            _conversationOpen = false;
+            _userIsWriting = false;
             RespondToDaddy(submittedText);
         }
 
@@ -79,12 +79,12 @@ namespace Game.Scripts.DaddyInteraction
         private void ShowReplyAndWaitForContinue(string replyText)
         {
             dialogUI.ShowLine(replyText, SpeakerColorMapping.GetColor(SpeakerColor.Daddy));
-            dialogUI.ContinueButtonnClicked += HandleReplyAcknowledged;
+            dialogUI.ContinueButtonClicked += HandleReplyAcknowledged;
         }
 
         private void HandleReplyAcknowledged()
         {
-            dialogUI.ContinueButtonnClicked -= HandleReplyAcknowledged;
+            dialogUI.ContinueButtonClicked -= HandleReplyAcknowledged;
             dialogUI.Hide();
             roomInput.SetInteractionEnabled(true);
         }

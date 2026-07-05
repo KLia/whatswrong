@@ -21,7 +21,7 @@ namespace Game.Scripts
 
             roomInput.InspectRequested += OnInspectItem;
             inspectionScreen.InspectionScreenClicked += CloseInspection;
-            dialogUI.ContinueButtonnClicked += CloseInspection;
+            dialogUI.ContinueButtonClicked += CloseInspection;
         }
 
         private void OnDisable()
@@ -31,7 +31,7 @@ namespace Game.Scripts
 
             roomInput.InspectRequested -= OnInspectItem;
             inspectionScreen.InspectionScreenClicked -= CloseInspection;
-            dialogUI.ContinueButtonnClicked -= CloseInspection;
+            dialogUI.ContinueButtonClicked -= CloseInspection;
         }
 
         private void OnInspectItem(InspectionData data)

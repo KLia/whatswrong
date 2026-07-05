@@ -22,7 +22,7 @@ namespace Game.Scripts.DaddyInteraction
             if (dialogUI == null)
                 return;
             
-            dialogUI.ContinueButtonnClicked += Continue;
+            dialogUI.ContinueButtonClicked += Continue;
         }
 
 
@@ -63,7 +63,7 @@ namespace Game.Scripts.DaddyInteraction
             if (dialogUI == null)
                 return;
 
-            dialogUI.ContinueButtonnClicked -= Continue;
+            dialogUI.ContinueButtonClicked -= Continue;
         }
     }
 }
