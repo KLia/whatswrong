@@ -227,7 +227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1131902738
 Transform:
   m_ObjectHideFlags: 0
@@ -365,7 +365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1927037145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +379,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DialogueInteractable
   diamond: {fileID: 1161440062}
-  gameManager: {fileID: 0}
   lines: []
   allowUserResponse: 1
   responseSpeakerColor: 0
@@ -524,7 +523,7 @@ GameObject:
   - component: {fileID: 2071452859}
   - component: {fileID: 2071452858}
   m_Layer: 0
-  m_Name: daddy_placeholder_0
+  m_Name: daddy_background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,9 +16,16 @@ namespace Game.Scripts
         public event Action MoveRightStarted;
         public event Action MoveRightStopped;
 
+        public event Action DragStarted;
+        public event Action<float> DragDelta;
+        public event Action DragEnded;
+
 
         private bool _leftWasPressed;
         private bool _rightWasPressed;
+        private bool _isDragging;
+        private Vector2 _lastPointerPosition;
+        private const float DragThreshold = 5f;
 
         private void OnLeftClick()
         {
@@ -50,6 +57,20 @@ namespace Game.Scripts
             MoveLeftStarted?.Invoke();
         }
 
+        private void OnDragStarted()
+        {
+            DragStarted?.Invoke();
+        }
+
+        private void OnDragDelta(float deltaX)
+        {
+            DragDelta?.Invoke(deltaX);
+        }
+
+        private void OnDragEnded()
+        {
+            DragEnded?.Invoke();
+        }
 
         private void Start()
         {
@@ -61,6 +82,47 @@ namespace Game.Scripts
         }
 
         private void Update()
+        {
+            HandleKeyboardInput();
+            HandlePointerDrag();
+        }
+
+        private void HandlePointerDrag()
+        {
+            Pointer pointer = Pointer.current;
+            if (pointer == null)
+                return;
+
+            bool pressed = pointer.press.isPressed;
+            Vector2 position = pointer.position.ReadValue();
+
+            if (pressed)
+            {
+                if (!_isDragging)
+                {
+                    _isDragging = true;
+                    _lastPointerPosition = position;
+                    OnDragStarted();
+                    return;
+                }
+
+                float deltaX = position.x - _lastPointerPosition.x;
+
+                if (Mathf.Abs(deltaX) > DragThreshold)
+                {
+                    OnDragDelta(deltaX);
+                }
+
+                _lastPointerPosition = position;
+            }
+            else if (_isDragging)
+            {
+                _isDragging = false;
+                OnDragEnded();
+            }
+        }
+
+        private void HandleKeyboardInput()
         {
             Keyboard keyboard = Keyboard.current;
             if (keyboard != null)
@@ -82,7 +144,6 @@ namespace Game.Scripts
 
                 _leftWasPressed = leftPressed;
                 _rightWasPressed = rightPressed;
-               
             }
         }
 
