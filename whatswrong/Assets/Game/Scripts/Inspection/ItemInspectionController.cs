@@ -20,8 +20,6 @@ namespace Game.Scripts
                 return;
 
             roomInput.InspectRequested += OnInspectItem;
-            inspectionScreen.InspectionScreenClicked += CloseInspection;
-            dialogUI.ContinueButtonClicked += CloseInspection;
         }
 
         private void OnDisable()
@@ -30,8 +28,6 @@ namespace Game.Scripts
                 return;
 
             roomInput.InspectRequested -= OnInspectItem;
-            inspectionScreen.InspectionScreenClicked -= CloseInspection;
-            dialogUI.ContinueButtonClicked -= CloseInspection;
         }
 
         private void OnInspectItem(InspectionData data)
@@ -50,29 +46,30 @@ namespace Game.Scripts
 
         private void OpenInspection(InspectionData data)
         {
-            DisableInput();
-            var description = gameManager.RevealClue(data.id);
             _inspecting = true;
+            
+            dialogUI.ContinueButtonClicked += CloseInspection;
+            inspectionScreen.InspectionScreenClicked += CloseInspection;
+            roomInput.SetInteractionEnabled(false);
+            
+            var description = gameManager.RevealClue(data.id);
             inspectionScreen.Show(data);
             dialogUI.ShowLine(description, SpeakerColorMapping.GetColor(SpeakerColor.Player));
         }
 
         private void CloseInspection()
         {
+            if (!_inspecting)
+                return;
+
+            _inspecting = false;
+            
+            dialogUI.ContinueButtonClicked -= CloseInspection;
+            inspectionScreen.InspectionScreenClicked -= CloseInspection;
+            roomInput.SetInteractionEnabled(true);
+                        
             inspectionScreen.Hide();
             dialogUI.Hide();
-            _inspecting = false;
-            EnableInput();
-        }
-        
-        private void DisableInput()
-        {
-            roomInput.SetInteractionEnabled(false);
-        }
-        
-        private void EnableInput()
-        {
-            roomInput.SetInteractionEnabled(true);
         }
     }
 }
