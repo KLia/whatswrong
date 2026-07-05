@@ -408,9 +408,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63cbc4f5a2e4ab44e8d478241dd1d79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorManager
-  defaultCursor: {fileID: 2800000, guid: 252ab3d2ddc726f46bca7be9d472d2ae, type: 3}
-  hoverCursor: {fileID: 2800000, guid: 703fd93fa26045e42a988ccf0b97731c, type: 3}
-  dragCursor: {fileID: 2800000, guid: c9e93e862be66b744a70d3f8e1451ba6, type: 3}
+  defaultCursor: {fileID: 2800000, guid: a0d8156474155e145963ab16b472cc03, type: 3}
+  hoverCursor: {fileID: 2800000, guid: 252a24edaa40fe844b6aa03d29c300e2, type: 3}
+  dragCursor: {fileID: 2800000, guid: 8893d51fe0a0f68458bb91e21d6fc5f1, type: 3}
   hotspot: {x: 0, y: 0}
   cursorMode: 0
 --- !u!4 &1698644576
