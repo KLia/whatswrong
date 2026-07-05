@@ -6,8 +6,8 @@ public class CursorManager : MonoBehaviour
     [SerializeField] private Texture2D defaultCursor;
     [SerializeField] private Texture2D hoverCursor;
     [SerializeField] private Texture2D dragCursor;
-    
-    public Vector2 hotspot = Vector2.zero;
+
+    public Vector2 hotspot = new (30, 15);
     public CursorMode cursorMode = CursorMode.Auto;
 
     private void Awake()
