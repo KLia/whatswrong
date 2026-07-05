@@ -92,6 +92,7 @@ namespace Game.Scripts
 
         private void Update()
         {
+        
             HandleKeyboardInput();
             HandlePointerDrag();
         }
