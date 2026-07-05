@@ -11,7 +11,7 @@ namespace Game.Scripts
     {
         private const string RoomsFolder = "Assets/Game/Scenes/Rooms/";
 
-        [SerializeField] private string startSceneName;
+        [SerializeField] private string FirstRoomName;
 
         private readonly List<string> _contentScenes = new List<string>();
         private int _currentIndex = -1;
@@ -43,7 +43,7 @@ namespace Game.Scripts
             }
 
             ResolveStartSceneIndex();
-            StartCoroutine(LoadInitialScene());
+           // StartCoroutine(LoadInitialScene());
         }
 
         private void BuildSceneList()
@@ -71,11 +71,11 @@ namespace Game.Scripts
         {
             _currentIndex = 0;
 
-            if (string.IsNullOrWhiteSpace(startSceneName))
+            if (string.IsNullOrWhiteSpace(FirstRoomName))
                 return;
 
             int index = _contentScenes.FindIndex(scenePath =>
-                Path.GetFileNameWithoutExtension(scenePath) == startSceneName);
+                Path.GetFileNameWithoutExtension(scenePath) == FirstRoomName);
 
             if (index >= 0)
             {
@@ -83,7 +83,7 @@ namespace Game.Scripts
             }
             else
             {
-                Debug.LogWarning($"Start scene '{startSceneName}' was not found in {_contentScenes.Count} room scenes. Falling back to first scene.");
+                Debug.LogWarning($"Start scene '{FirstRoomName}' was not found in {_contentScenes.Count} room scenes. Falling back to first scene.");
             }
         }
 
