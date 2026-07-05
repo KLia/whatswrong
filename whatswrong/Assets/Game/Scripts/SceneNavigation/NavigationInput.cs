@@ -61,12 +61,12 @@ namespace Game.Scripts
 
         private void OnDragStarted()
         {
-            _cursorManager.SetDragCursor();
             DragStarted?.Invoke();
         }
 
         private void OnDragDelta(float deltaX)
         {
+            _cursorManager.SetDragCursor();
             DragDelta?.Invoke(deltaX);
         }
 
