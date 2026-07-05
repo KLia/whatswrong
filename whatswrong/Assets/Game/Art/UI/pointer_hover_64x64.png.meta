@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 703fd93fa26045e42a988ccf0b97731c
+guid: 252a24edaa40fe844b6aa03d29c300e2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1385464368457637755
-    second: pointer_new_hover_0
+      213: -5745022873663233270
+    second: pointer_hover_64x64_0
   - first:
-      213: 4378444032250693434
-    second: pointer_new_hover_1
+      213: 5223320633397149830
+    second: pointer_hover_64x64_1
   - first:
-      213: 7838919171467178590
-    second: pointer_new_hover_2
-  - first:
-      213: 6339025213804954371
-    second: pointer_new_hover_3
+      213: -8227715464056217519
+    second: pointer_hover_64x64_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,13 +106,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pointer_new_hover_0
+      name: pointer_hover_64x64_0
       rect:
         serializedVersion: 2
-        x: 29
+        x: 13
         y: 1
-        width: 253
-        height: 437
+        width: 40
+        height: 61
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +121,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5802f155f77d5cce0800000000000000
-      internalID: -1385464368457637755
+      spriteID: a032fc482249540b0800000000000000
+      internalID: -5745022873663233270
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pointer_new_hover_1
+      name: pointer_hover_64x64_1
       rect:
         serializedVersion: 2
-        x: 178
-        y: 393
-        width: 38
-        height: 41
+        x: 35
+        y: 56
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a374b3b36ab53cc30800000000000000
-      internalID: 4378444032250693434
+      spriteID: 6800b951176fc7840800000000000000
+      internalID: 5223320633397149830
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pointer_new_hover_2
+      name: pointer_hover_64x64_2
       rect:
         serializedVersion: 2
         x: 10
-        y: 261
-        width: 59
-        height: 74
+        y: 37
+        width: 11
+        height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,30 +165,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e52fc4e347f69cc60800000000000000
-      internalID: 7838919171467178590
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pointer_new_hover_3
-      rect:
-        serializedVersion: 2
-        x: 253
-        y: 104
-        width: 34
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 303c61ba8ddb8f750800000000000000
-      internalID: 6339025213804954371
+      spriteID: 150e0f3b06841dd80800000000000000
+      internalID: -8227715464056217519
       vertices: []
       indices: 
       edges: []
@@ -210,10 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      pointer_new_hover_0: -1385464368457637755
-      pointer_new_hover_1: 4378444032250693434
-      pointer_new_hover_2: 7838919171467178590
-      pointer_new_hover_3: 6339025213804954371
+      pointer_hover_64x64_0: -5745022873663233270
+      pointer_hover_64x64_1: 5223320633397149830
+      pointer_hover_64x64_2: -8227715464056217519
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

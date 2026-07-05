@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Game.Scripts
 {
     [Serializable]
-    public class DialogElement
+    public class DialogLine
     {
         [SerializeField] public string text;
-        [SerializeField] public Color color;
+        [SerializeField] public SpeakerColor speakerColor;
     }
 }

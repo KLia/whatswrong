@@ -10,13 +10,13 @@ namespace Game.Scripts
     {
         public class SceneLoader : MonoBehaviour
         {
-            private InputMapping _inputMapping;
+            private NavigationInput _navigationInput;
             private SceneTransition _sceneTransition;
 
 
             private void Awake()
             {
-                _inputMapping = FindFirstObjectByType<InputMapping>();
+                _navigationInput = FindFirstObjectByType<NavigationInput>();
                 _sceneTransition = FindFirstObjectByType<SceneTransition>();
             }
 
@@ -76,7 +76,7 @@ namespace Game.Scripts
 
                     if (controller != null)
                     {
-                        controller.Initialize(_inputMapping);
+                        controller.Initialize(_navigationInput);
                         return;
                     }
                 }

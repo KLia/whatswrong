@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Game.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -348,7 +349,7 @@ public class RuntimeDialogueUI : MonoBehaviour
         }
 
         DialogueInteractable.DialogueLine line = _activeLines[_currentLineIndex];
-        ApplyDialogueColor(line.speakerColor);
+        _dialogueText.color = SpeakerColorMapping.GetColor(line.speakerColor);
 
         _responseRoot.SetActive(false);
         _dialogueText.gameObject.SetActive(true);
@@ -360,7 +361,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
     private void ShowResponseInput()
     {
-        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : DialogueInteractable.SpeakerColor.Pink);
+        ApplyResponseColors(_currentSource != null ? _currentSource.ResponseSpeakerColor : SpeakerColor.Player);
 
         _dialogueText.gameObject.SetActive(false);
         SetContinueBoxVisible(false);
@@ -458,7 +459,7 @@ public class RuntimeDialogueUI : MonoBehaviour
 
         var replyLine = new DialogueInteractable.DialogueLine
         {
-            speakerColor = DialogueInteractable.SpeakerColor.Blue,
+            speakerColor = SpeakerColor.Daddy,
             requestManualResponseAfterLine = false,
             text = replyText
         };
@@ -531,27 +532,15 @@ public class RuntimeDialogueUI : MonoBehaviour
         _continueBoxRect.gameObject.SetActive(isVisible);
     }
 
-    private void ApplyDialogueColor(DialogueInteractable.SpeakerColor speakerColor)
+    private void ApplyResponseColors(SpeakerColor speakerColor)
     {
-        _dialogueText.color = ResolveSpeakerColor(speakerColor);
-    }
-
-    private void ApplyResponseColors(DialogueInteractable.SpeakerColor speakerColor)
-    {
-        Color speakerColorValue = ResolveSpeakerColor(speakerColor);
+        Color speakerColorValue = SpeakerColorMapping.GetColor(speakerColor);
         Color placeholderColor = speakerColorValue;
         placeholderColor.a = 0.6f;
 
         _responsePromptText.color = speakerColorValue;
         _responseInputText.color = speakerColorValue;
         _responsePlaceholderText.color = placeholderColor;
-    }
-
-    private static Color ResolveSpeakerColor(DialogueInteractable.SpeakerColor speakerColor)
-    {
-        return speakerColor == DialogueInteractable.SpeakerColor.Blue
-            ? BlueSpeakerColor
-            : PinkSpeakerColor;
     }
 
     private void EnsureEventSystemExists()

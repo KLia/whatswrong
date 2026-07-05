@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Game.Scripts
 {
-    public class InputMapping : MonoBehaviour
+    public class NavigationInput : MonoBehaviour
     {
         [SerializeField] private NavigationControls navigationControls;
         public event Action NextRoom;
@@ -16,11 +16,18 @@ namespace Game.Scripts
         public event Action MoveRightStarted;
         public event Action MoveRightStopped;
 
-        public event Action Inspect;
-        public event Action Outspect;
+        public event Action DragStarted;
+        public event Action<float> DragDelta;
+        public event Action DragEnded;
 
+
+        private CursorManager _cursorManager;
+        
         private bool _leftWasPressed;
         private bool _rightWasPressed;
+        private bool _isDragging;
+        private Vector2 _lastPointerPosition;
+        private const float DragThreshold = 5f;
 
         private void OnLeftClick()
         {
@@ -52,14 +59,26 @@ namespace Game.Scripts
             MoveLeftStarted?.Invoke();
         }
 
-        private void OnObjectClicked()
+        private void OnDragStarted()
         {
-            Inspect?.Invoke();
+            DragStarted?.Invoke();
         }
 
-        private void OnAnywhereClicked()
+        private void OnDragDelta(float deltaX)
         {
-            Outspect?.Invoke();
+            _cursorManager.SetDragCursor();
+            DragDelta?.Invoke(deltaX);
+        }
+
+        private void OnDragEnded()
+        {
+            _cursorManager.SetDefaultCursor();
+            DragEnded?.Invoke();
+        }
+
+        private void Awake()
+        {
+            _cursorManager = FindObjectOfType<CursorManager>();
         }
 
         private void Start()
@@ -72,6 +91,47 @@ namespace Game.Scripts
         }
 
         private void Update()
+        {
+            HandleKeyboardInput();
+            HandlePointerDrag();
+        }
+
+        private void HandlePointerDrag()
+        {
+            Pointer pointer = Pointer.current;
+            if (pointer == null)
+                return;
+
+            bool pressed = pointer.press.isPressed;
+            Vector2 position = pointer.position.ReadValue();
+
+            if (pressed)
+            {
+                if (!_isDragging)
+                {
+                    _isDragging = true;
+                    _lastPointerPosition = position;
+                    OnDragStarted();
+                    return;
+                }
+
+                float deltaX = position.x - _lastPointerPosition.x;
+
+                if (Mathf.Abs(deltaX) > DragThreshold)
+                {
+                    OnDragDelta(deltaX);
+                }
+
+                _lastPointerPosition = position;
+            }
+            else if (_isDragging)
+            {
+                _isDragging = false;
+                OnDragEnded();
+            }
+        }
+
+        private void HandleKeyboardInput()
         {
             Keyboard keyboard = Keyboard.current;
             if (keyboard != null)
@@ -93,20 +153,6 @@ namespace Game.Scripts
 
                 _leftWasPressed = leftPressed;
                 _rightWasPressed = rightPressed;
-                if (keyboard.escapeKey.wasPressedThisFrame)
-                {
-                    OnAnywhereClicked();
-                }
-            }
-
-
-            Mouse mouse = Mouse.current;
-            if (mouse != null)
-            {
-                if (mouse.leftButton.wasPressedThisFrame)
-                {
-                    OnObjectClicked();
-                }
             }
         }
 

@@ -6,9 +6,13 @@ namespace Game.Scripts
     {
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private SpriteRenderer backgroundRenderer;
+        [SerializeField] private float dragSensitivity = 1f;
+
+        private bool _isDragging;
+        private Camera _camera;
 
         private float _moveDirection;
-        private InputMapping _input;
+        private NavigationInput _navigationInput;
         private Vector3 _initialPosition;
 
         private float _minX;
@@ -17,6 +21,9 @@ namespace Game.Scripts
         private void Awake()
         {
             _initialPosition = transform.position;
+            _camera = GetComponent<Camera>();
+            if (_camera == null)
+                _camera = Camera.main;
             CalculateBounds();
         }
 
@@ -63,21 +70,24 @@ namespace Game.Scripts
             _moveDirection = 0f;
         }
 
-        public void Initialize(InputMapping inputMapping)
+        public void Initialize(NavigationInput navigationInput)
         {
-            if (_input == inputMapping)
+            if (_navigationInput == navigationInput)
                 return;
 
             UnsubscribeInput();
-            _input = inputMapping;
+            _navigationInput = navigationInput;
 
-            if (_input == null)
+            if (_navigationInput == null)
                 return;
 
-            _input.MoveLeftStarted += OnMoveLeftStarted;
-            _input.MoveLeftStopped += OnMoveLeftStopped;
-            _input.MoveRightStarted += OnMoveRightStarted;
-            _input.MoveRightStopped += OnMoveRightStopped;
+            _navigationInput.MoveLeftStarted += OnMoveLeftStarted;
+            _navigationInput.MoveLeftStopped += OnMoveLeftStopped;
+            _navigationInput.MoveRightStarted += OnMoveRightStarted;
+            _navigationInput.MoveRightStopped += OnMoveRightStopped;
+            _navigationInput.DragStarted += OnDragStarted;
+            _navigationInput.DragDelta += OnDragDelta;
+            _navigationInput.DragEnded += OnDragEnded;
         }
 
         public void OnMoveLeftStarted()
@@ -102,8 +112,41 @@ namespace Game.Scripts
                 _moveDirection = 0f;
         }
 
+        private void OnDragStarted()
+        {
+            _isDragging = true;
+            _moveDirection = 0f; // stop keyboard scrolling while dragging
+        }
+
+        private void OnDragEnded()
+        {
+            _isDragging = false;
+        }
+
+        private void OnDragDelta(float deltaPixels)
+        {
+            if (!_isDragging || _camera == null)
+                return;
+
+            float pixelsPerWorldUnit = Screen.width / (_camera.orthographicSize * 2f * _camera.aspect);
+
+            float deltaWorld = deltaPixels / pixelsPerWorldUnit;
+
+            Vector3 pos = transform.position;
+
+            // Invert if you want "grab and drag" behavior.
+            pos.x -= deltaWorld * dragSensitivity;
+
+            pos.x = Mathf.Clamp(pos.x, _minX, _maxX);
+
+            transform.position = pos;
+        }
+        
         private void Update()
         {
+            if (_isDragging)
+                return;
+            
             if (_moveDirection == 0f)
                 return;
 
@@ -121,14 +164,17 @@ namespace Game.Scripts
 
         private void UnsubscribeInput()
         {
-            if (_input == null)
+            if (_navigationInput == null)
                 return;
 
-            _input.MoveLeftStarted -= OnMoveLeftStarted;
-            _input.MoveLeftStopped -= OnMoveLeftStopped;
-            _input.MoveRightStarted -= OnMoveRightStarted;
-            _input.MoveRightStopped -= OnMoveRightStopped;
-            _input = null;
+            _navigationInput.MoveLeftStarted -= OnMoveLeftStarted;
+            _navigationInput.MoveLeftStopped -= OnMoveLeftStopped;
+            _navigationInput.MoveRightStarted -= OnMoveRightStarted;
+            _navigationInput.MoveRightStopped -= OnMoveRightStopped;
+            _navigationInput.DragStarted -= OnDragStarted;
+            _navigationInput.DragDelta -= OnDragDelta;
+            _navigationInput.DragEnded -= OnDragEnded;
+            _navigationInput = null;
         }
 
         public void OnBeforeSceneLoad()

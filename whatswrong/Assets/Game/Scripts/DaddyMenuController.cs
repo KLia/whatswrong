@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using DefaultNamespace;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +11,7 @@ using UnityEngine.UI;
 public class DaddyMenuController : MonoBehaviour
 {
     private const int UiLayer = 5;
-    private const string StartupSceneName = "StartupScene";
+    private const string GameSceneName = "MainScene";
 
     private List<string> _daddyNames = new List<string>();
 
@@ -239,7 +238,7 @@ public class DaddyMenuController : MonoBehaviour
             btnText.text = "Start Game";
         }
 
-        startButton.onClick.AddListener(() => SceneManager.LoadScene(StartupSceneName));
+        startButton.onClick.AddListener(() => SceneManager.LoadScene(GameSceneName));
     }
 
     private Dropdown CreateDropdown(Transform parent, Font font)

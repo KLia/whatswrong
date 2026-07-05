@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Scripts
 {
-    public class InspectableHotspot : MonoBehaviour
+    public class InspectionTrigger : MonoBehaviour
     {
         [SerializeField] private InspectionData data;
 
